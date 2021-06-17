@@ -1,7 +1,7 @@
 --- 
-title: "Theory Construction and Statistical Modeling"
-subtitle: "A guide to structural equation modeling in R"
-author: "Caspar J. van Lissa¹"
+title: "S23 Summer School"
+subtitle: "Advanced Course on using Mplus"
+author: "Caspar J. van Lissa¹ (only this GitBook; rest of the course by colleagues)"
 date: "¹Utrecht University, Methodology & Statistics"
 site: bookdown::bookdown_site
 output: 
@@ -18,7 +18,7 @@ documentclass: book
 bibliography: [book.bib, packages.bib]
 biblio-style: apalike
 link-citations: yes
-description: "This is a guide for the elective course TCSM."
+description: "This is a guide for the Advanced Course on using Mplus."
 ---
 
 # Course {-}
@@ -26,8 +26,4 @@ description: "This is a guide for the elective course TCSM."
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
-In this course you will learn how to translate a social scientific theory into a statistical model, how to analyze your data with these models, and how to interpret and report your results following APA standards.
-
-The analyses will be executed using the statistical programming environment R, and in particular using the structural equation modeling package `lavaan`.
-
-**You do not need a book for this course.** Most information is contained within this GitBook and the course readings. Optionally, if you want to expand your learning, you can follow the excellent [`lavaan` tutorial](https://lavaan.ugent.be/tutorial/).
+This is a five-day course on structural equation modeling (SEM) using Mplus. If you already know how to analyse your data in Mplus but want to learn more about what you are actually doing, and especially if you want to know more about advanced longitudinal analyses, this course is for you. The course consists of in-depth lectures on the fundamentals of Mplus and advanced longitudinal models.

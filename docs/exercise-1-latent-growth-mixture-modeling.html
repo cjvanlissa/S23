@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3.1 Exercise 1: Latent Growth (Mixture) Modeling | S23 Summer School</title>
+  <meta name="description" content="This is a guide for the Advanced Course on using Mplus." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3.1 Exercise 1: Latent Growth (Mixture) Modeling | S23 Summer School" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is a guide for the Advanced Course on using Mplus." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3.1 Exercise 1: Latent Growth (Mixture) Modeling | S23 Summer School" />
+  
+  <meta name="twitter:description" content="This is a guide for the Advanced Course on using Mplus." />
+  
+
+<meta name="author" content="Caspar J. van Lissa¹ (only this GitBook; rest of the course by colleagues)" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="day-3-latent-growth-mixture-modeling.html"/>
+<link rel="next" href="exercise-2-latent-transition-analysis-lta.html"/>
+<script src="libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="libs/pagedtable-1.1/js/pagedtable.js"></script>
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+<link rel="stylesheet" href="font-awesome.min.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./index.html">TCSM</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Course</a></li>
+<li class="chapter" data-level="1" data-path="preparing-for-the-course.html"><a href="preparing-for-the-course.html"><i class="fa fa-check"></i><b>1</b> Preparing for the course</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="installing-software.html"><a href="installing-software.html"><i class="fa fa-check"></i><b>1.1</b> Installing software</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="installing-software.html"><a href="installing-software.html#installpackages"><i class="fa fa-check"></i><b>1.1.1</b> Installing packages</a></li>
+<li class="chapter" data-level="1.1.2" data-path="installing-software.html"><a href="installing-software.html#get-started"><i class="fa fa-check"></i><b>1.1.2</b> Get started</a></li>
+<li class="chapter" data-level="1.1.3" data-path="installing-software.html"><a href="installing-software.html#starting-a-new-project-in-rstudio"><i class="fa fa-check"></i><b>1.1.3</b> Starting a new project in Rstudio</a></li>
+<li class="chapter" data-level="1.1.4" data-path="installing-software.html"><a href="installing-software.html#code-conventions"><i class="fa fa-check"></i><b>1.1.4</b> Code conventions</a></li>
+<li class="chapter" data-level="1.1.5" data-path="installing-software.html"><a href="installing-software.html#getting-help"><i class="fa fa-check"></i><b>1.1.5</b> Getting Help</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="getting-the-course-data.html"><a href="getting-the-course-data.html"><i class="fa fa-check"></i><b>1.2</b> Getting the course data</a></li>
+<li class="chapter" data-level="1.3" data-path="r-tutorial-for-beginners-optional.html"><a href="r-tutorial-for-beginners-optional.html"><i class="fa fa-check"></i><b>1.3</b> R tutorial for beginners (optional)</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="r-tutorial-for-beginners-optional.html"><a href="r-tutorial-for-beginners-optional.html#who-r-you"><i class="fa fa-check"></i><b>1.3.1</b> Who R you?</a></li>
+<li class="chapter" data-level="1.3.2" data-path="r-tutorial-for-beginners-optional.html"><a href="r-tutorial-for-beginners-optional.html#rstudio"><i class="fa fa-check"></i><b>1.3.2</b> RStudio</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="day-2-latent-growth-models.html"><a href="day-2-latent-growth-models.html"><i class="fa fa-check"></i><b>2</b> Day 2: Latent Growth Models</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html"><i class="fa fa-check"></i><b>2.1</b> Exercise 1: burn survivors</a>
+<ul>
+<li class="chapter" data-level="2.1.1" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html#exercise-1a-find-the-best-lgm-model"><i class="fa fa-check"></i><b>2.1.1</b> Exercise 1a: Find the best LGM model</a></li>
+<li class="chapter" data-level="2.1.2" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html#exercise-1b-add-covariates"><i class="fa fa-check"></i><b>2.1.2</b> Exercise 1b: Add covariates</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="exercise-2-alcohol-use.html"><a href="exercise-2-alcohol-use.html"><i class="fa fa-check"></i><b>2.2</b> Exercise 2: Alcohol use</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="exercise-2-alcohol-use.html"><a href="exercise-2-alcohol-use.html#exercise-2a"><i class="fa fa-check"></i><b>2.2.1</b> Exercise 2a</a></li>
+<li class="chapter" data-level="2.2.2" data-path="exercise-2-alcohol-use.html"><a href="exercise-2-alcohol-use.html#exercise-2b"><i class="fa fa-check"></i><b>2.2.2</b> Exercise 2b</a></li>
+<li class="chapter" data-level="2.2.3" data-path="exercise-2-alcohol-use.html"><a href="exercise-2-alcohol-use.html#exercise-2c"><i class="fa fa-check"></i><b>2.2.3</b> Exercise 2c</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="exercise-3-level-and-shape-parameterization.html"><a href="exercise-3-level-and-shape-parameterization.html"><i class="fa fa-check"></i><b>2.3</b> Exercise 3: Level and Shape Parameterization</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="exercise-3-level-and-shape-parameterization.html"><a href="exercise-3-level-and-shape-parameterization.html#exercise-3a"><i class="fa fa-check"></i><b>2.3.1</b> Exercise 3a</a></li>
+<li class="chapter" data-level="2.3.2" data-path="exercise-3-level-and-shape-parameterization.html"><a href="exercise-3-level-and-shape-parameterization.html#exercise-3b"><i class="fa fa-check"></i><b>2.3.2</b> Exercise 3b</a></li>
+<li class="chapter" data-level="2.3.3" data-path="exercise-3-level-and-shape-parameterization.html"><a href="exercise-3-level-and-shape-parameterization.html#exercise-3c"><i class="fa fa-check"></i><b>2.3.3</b> Exercise 3c</a></li>
+<li class="chapter" data-level="2.3.4" data-path="exercise-3-level-and-shape-parameterization.html"><a href="exercise-3-level-and-shape-parameterization.html#exercise-3d"><i class="fa fa-check"></i><b>2.3.4</b> Exercise 3d</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="exercise-4-latent-growth-model-on-gpa-data.html"><a href="exercise-4-latent-growth-model-on-gpa-data.html"><i class="fa fa-check"></i><b>2.4</b> Exercise 4: latent growth model on GPA data</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="exercise-4-latent-growth-model-on-gpa-data.html"><a href="exercise-4-latent-growth-model-on-gpa-data.html#exercise-4a"><i class="fa fa-check"></i><b>2.4.1</b> Exercise 4a</a></li>
+<li class="chapter" data-level="2.4.2" data-path="exercise-4-latent-growth-model-on-gpa-data.html"><a href="exercise-4-latent-growth-model-on-gpa-data.html#exercise-4b"><i class="fa fa-check"></i><b>2.4.2</b> Exercise 4b</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="day-3-latent-growth-mixture-modeling.html"><a href="day-3-latent-growth-mixture-modeling.html"><i class="fa fa-check"></i><b>3</b> Day 3: Latent Growth (Mixture) Modeling</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="exercise-1-latent-growth-mixture-modeling.html"><a href="exercise-1-latent-growth-mixture-modeling.html"><i class="fa fa-check"></i><b>3.1</b> Exercise 1: Latent Growth (Mixture) Modeling</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="exercise-1-latent-growth-mixture-modeling.html"><a href="exercise-1-latent-growth-mixture-modeling.html#a.-latent-class-growth-models."><i class="fa fa-check"></i><b>3.1.1</b> 1a. Latent Class Growth Models.</a></li>
+<li class="chapter" data-level="3.1.2" data-path="exercise-1-latent-growth-mixture-modeling.html"><a href="exercise-1-latent-growth-mixture-modeling.html#b.-increasing-random-starts"><i class="fa fa-check"></i><b>3.1.2</b> 1b. Increasing random starts</a></li>
+<li class="chapter" data-level="3.1.3" data-path="exercise-1-latent-growth-mixture-modeling.html"><a href="exercise-1-latent-growth-mixture-modeling.html#c.-latent-growth-mixture-models."><i class="fa fa-check"></i><b>3.1.3</b> 1c. Latent Growth Mixture Models.</a></li>
+<li class="chapter" data-level="3.1.4" data-path="exercise-1-latent-growth-mixture-modeling.html"><a href="exercise-1-latent-growth-mixture-modeling.html#d.-visualizing-growth-models."><i class="fa fa-check"></i><b>3.1.4</b> 1d. Visualizing growth models.</a></li>
+<li class="chapter" data-level="3.1.5" data-path="exercise-1-latent-growth-mixture-modeling.html"><a href="exercise-1-latent-growth-mixture-modeling.html#e.-the-3-step-model."><i class="fa fa-check"></i><b>3.1.5</b> 1e. The 3-step model.</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="exercise-2-latent-transition-analysis-lta.html"><a href="exercise-2-latent-transition-analysis-lta.html"><i class="fa fa-check"></i><b>3.2</b> Exercise 2: Latent Transition Analysis (LTA)</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="exercise-2-latent-transition-analysis-lta.html"><a href="exercise-2-latent-transition-analysis-lta.html#a.-latent-transition-analysis-with-probability-parameterization"><i class="fa fa-check"></i><b>3.2.1</b> 2a. Latent transition analysis with probability parameterization</a></li>
+<li class="chapter" data-level="3.2.2" data-path="exercise-2-latent-transition-analysis-lta.html"><a href="exercise-2-latent-transition-analysis-lta.html#b.-class-proportions-and-transition-probabilities"><i class="fa fa-check"></i><b>3.2.2</b> 2b. Class proportions and transition probabilities</a></li>
+<li class="chapter" data-level="3.2.3" data-path="exercise-2-latent-transition-analysis-lta.html"><a href="exercise-2-latent-transition-analysis-lta.html#c.-adding-control-variables-optional"><i class="fa fa-check"></i><b>3.2.3</b> 2c. Adding control variables (optional)</a></li>
+<li class="chapter" data-level="3.2.4" data-path="exercise-2-latent-transition-analysis-lta.html"><a href="exercise-2-latent-transition-analysis-lta.html#d.-extend-the-model-to-a-mover-stayer-model-optional"><i class="fa fa-check"></i><b>3.2.4</b> 2d. Extend the model to a mover-stayer model (optional)</a></li>
+<li class="chapter" data-level="3.2.5" data-path="exercise-2-latent-transition-analysis-lta.html"><a href="exercise-2-latent-transition-analysis-lta.html#e.-selecting-the-number-of-classes-optional"><i class="fa fa-check"></i><b>3.2.5</b> 2e. Selecting the number of classes (optional)</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">S23 Summer School</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="exercise-1-latent-growth-mixture-modeling" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Exercise 1: Latent Growth (Mixture) Modeling</h2>
+<div id="a.-latent-class-growth-models." class="section level3" number="3.1.1">
+<h3><span class="header-section-number">3.1.1</span> 1a. Latent Class Growth Models.</h3>
+<p>Set up the growth curve model as depicted in Figure 1 in Mplus, using the | notation. Use the file DDS8_1.dat for this.</p>
+<div class="figure">
+<img src="./Materials/Figure1_lgm_alcohol.png" width="400" alt="" />
+<p class="caption">Latent Growth model for alcohol</p>
+</div>
+<p>First, load the file <code>DDS8_1.dat</code> into the R environment. For convenience’s sake, rename the columns of the data object to something a human would understand:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="exercise-1-latent-growth-mixture-modeling.html#cb25-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;DDS8_1.dat&quot;</span>, <span class="at">na.strings =</span> <span class="sc">-</span><span class="dv">99</span>)</span>
+<span id="cb25-2"><a href="exercise-1-latent-growth-mixture-modeling.html#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ALC1YR1&quot;</span>, <span class="st">&quot;ALC1YR2&quot;</span>, <span class="st">&quot;ALC1YR3&quot;</span>, <span class="st">&quot;ALCPROB5&quot;</span>, <span class="st">&quot;AGE1&quot;</span>, <span class="st">&quot;GENDER1&quot;</span>)</span></code></pre></div>
+<p>Use the function <code>createMixtures</code> to define the latent class growth model as displayed in Figure 1. To see how the function <code>createMixtures()</code> works, type its name, select it, and press F1.</p>
+<p>You can specify the model using the “|” notation. Constrain the variance of the intercept and slope factors to be equal to zero, using the Mplus syntax <code>i@0; s@0;</code>.</p>
+<p>In createMixtures, you can specify the overall model using the argument <code>model_overall = "i s | ALC1YR1@0 ALC1YR2@1 ALC1YR3@2;  i@0;  s@0;"</code>. The double spaces are converted to newline characters, which results in a nicely formatted Mplus file.</p>
+<p>Request 1 to 6 classes, by specifying the argument <code>classes = 1:6</code> for createMixtures. Request tech8, tech11 and tech14 output by specifying the argument: <code>OUTPUT = "tech8 tech11 tech14;"</code>.</p>
+<p>To run the analysis, add the argument <code>run = 1L</code> to the <code>createMixtures()</code> call.
+Make sure to store the resulting output in an object, the same way you stored the data in an object called <code>data</code> when using the function <code>read.table()</code>.</p>
+<details>
+<summary>
+<b>Click to show answers</b>
+</summary>
+<p>The resulting syntax should look like this:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="exercise-1-latent-growth-mixture-modeling.html#cb26-1" aria-hidden="true" tabindex="-1"></a>results_1a <span class="ot">&lt;-</span> <span class="fu">createMixtures</span>(<span class="at">classes =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">filename_stem =</span> <span class="st">&quot;1a&quot;</span>,</span>
+<span id="cb26-2"><a href="exercise-1-latent-growth-mixture-modeling.html#cb26-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">model_overall =</span> <span class="st">&quot;i s | ALC1YR1@0 ALC1YR2@1 ALC1YR3@2;</span></span>
+<span id="cb26-3"><a href="exercise-1-latent-growth-mixture-modeling.html#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="st">                                         i@0;  s@0;&quot;</span>,</span>
+<span id="cb26-4"><a href="exercise-1-latent-growth-mixture-modeling.html#cb26-4" aria-hidden="true" tabindex="-1"></a>                        <span class="at">rdata =</span> data, </span>
+<span id="cb26-5"><a href="exercise-1-latent-growth-mixture-modeling.html#cb26-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">usevariables =</span> <span class="fu">c</span>(<span class="st">&quot;ALC1YR1&quot;</span>, <span class="st">&quot;ALC1YR2&quot;</span>, <span class="st">&quot;ALC1YR3&quot;</span>),</span>
+<span id="cb26-6"><a href="exercise-1-latent-growth-mixture-modeling.html#cb26-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">OUTPUT =</span> <span class="st">&quot;tech8 tech11 tech14;&quot;</span>,</span>
+<span id="cb26-7"><a href="exercise-1-latent-growth-mixture-modeling.html#cb26-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">run =</span> 1L)</span></code></pre></div>
+<p>The function <code>createModels()</code> can run all of the analyses in batch, thus taking a lot of work out of your hands.
+The function essentially performs three steps:</p>
+<ol style="list-style-type: decimal">
+<li>Create Mplus syntax for each of the latent class models based on <code>model_overall</code> and <code>model_class_specific</code></li>
+<li>Use the function <code>mplusObject()</code> to turn this syntax into a model that can be evaluated</li>
+<li>Use the function <code>mplusModeler()</code> to create the Mplus <code>.inp</code> files, run them, and return the results</li>
+</ol>
+<p>If you use MplusAutomation for other types of models, you won’t need <code>createMixtures()</code>. Instead, you can use <code>mplusObject()</code> and <code>mplusModeler()</code>.</p>
+<p>To see what the function <code>createMixtures()</code> is doing, you should inspect each of the automatically generated input files (<code>.inp</code>). You can even run one by hand.</p>
+<p>Finally, print a summary table to the R console by calling <code>mixtureSummaryTable()</code> on the results object.</p>
+<details>
+<summary>
+<b>Click to show answers</b>
+</summary>
+<p>The resulting syntax should look like this:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="exercise-1-latent-growth-mixture-modeling.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mixtureSummaryTable</span>(results_1a)</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Title
+</th>
+<th style="text-align:right;">
+Classes
+</th>
+<th style="text-align:right;">
+AIC
+</th>
+<th style="text-align:right;">
+BIC
+</th>
+<th style="text-align:right;">
+aBIC
+</th>
+<th style="text-align:right;">
+Entropy
+</th>
+<th style="text-align:right;">
+T11_VLMR_PValue
+</th>
+<th style="text-align:right;">
+T11_LMR_PValue
+</th>
+<th style="text-align:right;">
+BLRT_PValue
+</th>
+<th style="text-align:right;">
+min_N
+</th>
+<th style="text-align:right;">
+max_N
+</th>
+<th style="text-align:right;">
+min_prob
+</th>
+<th style="text-align:right;">
+max_prob
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+6 classes
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4937.589
+</td>
+<td style="text-align:right;">
+5020.473
+</td>
+<td style="text-align:right;">
+4956.997
+</td>
+<td style="text-align:right;">
+0.760
+</td>
+<td style="text-align:right;">
+0.0001
+</td>
+<td style="text-align:right;">
+0.0002
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+466
+</td>
+<td style="text-align:right;">
+466
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+<td style="text-align:right;">
+1.000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5 classes
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+4961.706
+</td>
+<td style="text-align:right;">
+5032.157
+</td>
+<td style="text-align:right;">
+4978.203
+</td>
+<td style="text-align:right;">
+0.753
+</td>
+<td style="text-align:right;">
+0.1082
+</td>
+<td style="text-align:right;">
+0.1188
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+144
+</td>
+<td style="text-align:right;">
+322
+</td>
+<td style="text-align:right;">
+0.863
+</td>
+<td style="text-align:right;">
+0.953
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4 classes
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4970.749
+</td>
+<td style="text-align:right;">
+5028.767
+</td>
+<td style="text-align:right;">
+4984.335
+</td>
+<td style="text-align:right;">
+0.801
+</td>
+<td style="text-align:right;">
+0.0095
+</td>
+<td style="text-align:right;">
+0.0117
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+65
+</td>
+<td style="text-align:right;">
+262
+</td>
+<td style="text-align:right;">
+0.859
+</td>
+<td style="text-align:right;">
+0.955
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3 classes
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+4994.802
+</td>
+<td style="text-align:right;">
+5040.388
+</td>
+<td style="text-align:right;">
+5005.477
+</td>
+<td style="text-align:right;">
+0.825
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+237
+</td>
+<td style="text-align:right;">
+0.653
+</td>
+<td style="text-align:right;">
+0.942
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2 classes
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5190.867
+</td>
+<td style="text-align:right;">
+5224.021
+</td>
+<td style="text-align:right;">
+5198.631
+</td>
+<td style="text-align:right;">
+0.734
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+<td style="text-align:right;">
+0.0000
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:right;">
+204
+</td>
+<td style="text-align:right;">
+0.727
+</td>
+<td style="text-align:right;">
+0.923
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1 classes
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+5339.267
+</td>
+<td style="text-align:right;">
+5359.988
+</td>
+<td style="text-align:right;">
+5344.119
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+147
+</td>
+<td style="text-align:right;">
+0.689
+</td>
+<td style="text-align:right;">
+0.908
+</td>
+</tr>
+</tbody>
+</table>
+<div id="visualization-1" class="section level4" number="3.1.1.1">
+<h4><span class="header-section-number">3.1.1.1</span> Visualization</h4>
+<p>To verify that the estimated model corresponds to the Figure above, you can use the SEM graphing package <code>tidySEM</code>.
+This flexible package produces fully customizable plots based on the R graphing package <code>ggplot2</code> for Mplus (and <code>lavaan</code>) models.
+If you want to make publication quality graphs, <a href="https://cjvanlissa.github.io/tidySEM/articles/Plotting_graphs.html">here is an online tutorial for graph customization</a>.
+The script below demonstrates how to plot a model using <code>tidySEM</code>.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="exercise-1-latent-growth-mixture-modeling.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;tidySEM&quot;</span>)</span>
+<span id="cb28-2"><a href="exercise-1-latent-growth-mixture-modeling.html#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidySEM)</span>
+<span id="cb28-3"><a href="exercise-1-latent-growth-mixture-modeling.html#cb28-3" aria-hidden="true" tabindex="-1"></a>lo <span class="ot">&lt;-</span> <span class="fu">get_layout</span>(<span class="st">&quot;I&quot;</span>,       <span class="st">&quot;&quot;</span>,        <span class="st">&quot;S&quot;</span>,</span>
+<span id="cb28-4"><a href="exercise-1-latent-growth-mixture-modeling.html#cb28-4" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;ALC1YR1&quot;</span>, <span class="st">&quot;ALC1YR2&quot;</span>, <span class="st">&quot;ALC1YR3&quot;</span>, <span class="at">rows =</span> <span class="dv">2</span>)</span>
+<span id="cb28-5"><a href="exercise-1-latent-growth-mixture-modeling.html#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">graph_sem</span>(results_1a[[<span class="dv">1</span>]], <span class="at">layout =</span> lo, <span class="at">angle =</span> <span class="dv">179</span>)</span></code></pre></div>
+<p><img src="TCSM_files/figure-html/demotidysem-1.png" width="672" /></p>
+</div>
+</div>
+<div id="b.-increasing-random-starts" class="section level3" number="3.1.2">
+<h3><span class="header-section-number">3.1.2</span> 1b. Increasing random starts</h3>
+<p>These models use random starting values. Several independent random starts are made, to ensure that the model converges on the proper solution. The default is 20 random sets of starting values, of which 4 are run to completion. Inspect the output, and look carefully if the model estimation has converged, especially for the larger number of classes. Look for warning and error messages, make sure you understand what they are telling you.</p>
+<p>The STARTS option is used to specify the number of initial random starting values and final stage optimizations. Now, increase the number of starts to ensure proper convergence. For createMixtures, the argument is <code>ANALYSIS = "STARTS = .. ..;"</code>.</p>
+<details>
+<summary>
+<b>Click to show answers</b>
+</summary>
+<p>The resulting syntax should look like this:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="exercise-1-latent-growth-mixture-modeling.html#cb29-1" aria-hidden="true" tabindex="-1"></a>results_1b <span class="ot">&lt;-</span> <span class="fu">createMixtures</span>(<span class="at">classes =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">filename_stem =</span> <span class="st">&quot;1b&quot;</span>,</span>
+<span id="cb29-2"><a href="exercise-1-latent-growth-mixture-modeling.html#cb29-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">model_overall =</span> <span class="st">&quot;i s | ALC1YR1@0 ALC1YR2@1 ALC1YR3@2;</span></span>
+<span id="cb29-3"><a href="exercise-1-latent-growth-mixture-modeling.html#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="st">                                              i@0;  s@0;&quot;</span>,</span>
+<span id="cb29-4"><a href="exercise-1-latent-growth-mixture-modeling.html#cb29-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">ANALYSIS =</span> <span class="st">&quot;STARTS = 50 10;&quot;</span>,</span>
+<span id="cb29-5"><a href="exercise-1-latent-growth-mixture-modeling.html#cb29-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">rdata =</span> data, </span>
+<span id="cb29-6"><a href="exercise-1-latent-growth-mixture-modeling.html#cb29-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">usevariables =</span> <span class="fu">c</span>(<span class="st">&quot;ALC1YR1&quot;</span>, <span class="st">&quot;ALC1YR2&quot;</span>, <span class="st">&quot;ALC1YR3&quot;</span>),</span>
+<span id="cb29-7"><a href="exercise-1-latent-growth-mixture-modeling.html#cb29-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">OUTPUT =</span> <span class="st">&quot;tech8 tech11 tech14;&quot;</span>,</span>
+<span id="cb29-8"><a href="exercise-1-latent-growth-mixture-modeling.html#cb29-8" aria-hidden="true" tabindex="-1"></a>                             <span class="at">run =</span> 1L)</span></code></pre></div>
+<p>Make a mixture summary table to compare the fit information of the models with 1-6 classes, with the increased number of starts, using <code>mixtureSummaryTable()</code>. Also open the output files, and inspect the estimates in each class. Which model do you prefer, and why?</p>
+<details>
+<summary>
+<b>Click to show answers</b>
+</summary>
+<p>The resulting syntax should look like this:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="exercise-1-latent-growth-mixture-modeling.html#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mixtureSummaryTable</span>(results_1b)</span></code></pre></div>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Title
+</th>
+<th style="text-align:right;">
+Classes
+</th>
+<th style="text-align:right;">
+AIC
+</th>
+<th style="text-align:right;">
+BIC
+</th>
+<th style="text-align:right;">
+aBIC
+</th>
+<th style="text-align:right;">
+Entropy
+</th>
+<th style="text-align:right;">
+T11_VLMR_PValue
+</th>
+<th style="text-align:right;">
+T11_LMR_PValue
+</th>
+<th style="text-align:right;">
+BLRT_PValue
+</th>
+<th style="text-align:right;">
+min_N
+</th>
+<th style="text-align:right;">
+max_N
+</th>
+<th style="text-align:right;">
+min_prob
+</th>
+<th style="text-align:right;">
+max_prob
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+6 classes
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+4937.59
+</td>
+<td style="text-align:right;">
+5020.47
+</td>
+<td style="text-align:right;">
+4957.00
+</td>
+<td style="text-align:right;">
+0.76
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+466
+</td>
+<td style="text-align:right;">
+466
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+5 classes
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+4961.71
+</td>
+<td style="text-align:right;">
+5032.16
+</td>
+<td style="text-align:right;">
+4978.20
+</td>
+<td style="text-align:right;">
+0.75
+</td>
+<td style="text-align:right;">
+0.11
+</td>
+<td style="text-align:right;">
+0.12
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+144
+</td>
+<td style="text-align:right;">
+322
+</td>
+<td style="text-align:right;">
+0.86
+</td>
+<td style="text-align:right;">
+0.95
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+4 classes
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+4970.75
+</td>
+<td style="text-align:right;">
+5028.77
+</td>
+<td style="text-align:right;">
+4984.34
+</td>
+<td style="text-align:right;">
+0.80
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+0.01
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+65
+</td>
+<td style="text-align:right;">
+262
+</td>
+<td style="text-align:right;">
+0.86
+</td>
+<td style="text-align:right;">
+0.96
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+3 classes
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+4994.80
+</td>
+<td style="text-align:right;">
+5040.39
+</td>
+<td style="text-align:right;">
+5005.48
+</td>
+<td style="text-align:right;">
+0.82
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:right;">
+237
+</td>
+<td style="text-align:right;">
+0.65
+</td>
+<td style="text-align:right;">
+0.94
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2 classes
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+5190.87
+</td>
+<td style="text-align:right;">
+5224.02
+</td>
+<td style="text-align:right;">
+5198.63
+</td>
+<td style="text-align:right;">
+0.73
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+34
+</td>
+<td style="text-align:right;">
+204
+</td>
+<td style="text-align:right;">
+0.73
+</td>
+<td style="text-align:right;">
+0.92
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+1 classes
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+5339.27
+</td>
+<td style="text-align:right;">
+5359.99
+</td>
+<td style="text-align:right;">
+5344.12
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+32
+</td>
+<td style="text-align:right;">
+147
+</td>
+<td style="text-align:right;">
+0.69
+</td>
+<td style="text-align:right;">
+0.91
+</td>
+</tr>
+</tbody>
+</table>
+<p>Based on the table, I would select a 3-class model. The fit indices and (V)LMR tests essentially indicate that you can keep adding classes and improve the model, which makes it difficult to decide. However, if we look at min_N, we see that from 4 classes onward, the smallest class has less than 10% of cases assigned to it. The minimum posterior classification probability and entropy are best for the 3-class model, which means that this model can reasonably accurately assign individuals to classes.</p>
+</div>
+<div id="c.-latent-growth-mixture-models." class="section level3" number="3.1.3">
+<h3><span class="header-section-number">3.1.3</span> 1c. Latent Growth Mixture Models.</h3>
+<p>Set up the same models as analyzed in the previous exercise, but now allow the means and variances of the intercept and slope factors to be freely estimated in each class. You do this by mentioning the intercept and slope explicitly in the class-specific part of the syntax. This is a more complex model, and we might therefore expect that we will need fewer classes for a good description of the data. This analysis will also take more computing time, so add <code>PROCESSORS=4</code> to the analysis section. Make a table of the fit indices, look at AIC, BIC, and the Bootstrapped LRT value (Tech 14).</p>
+<details>
+<summary>
+<b>Click to show answers</b>
+</summary>
+<p>The resulting syntax should look like this:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="exercise-1-latent-growth-mixture-modeling.html#cb31-1" aria-hidden="true" tabindex="-1"></a>results_1c <span class="ot">&lt;-</span> <span class="fu">createMixtures</span>(<span class="at">classes =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">filename_stem =</span> <span class="st">&quot;1c&quot;</span>, </span>
+<span id="cb31-2"><a href="exercise-1-latent-growth-mixture-modeling.html#cb31-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">model_overall =</span> <span class="st">&quot;i s | ALC1YR1@0 ALC1YR2@1 ALC1YR3@2;</span></span>
+<span id="cb31-3"><a href="exercise-1-latent-growth-mixture-modeling.html#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="st">                                              i@0;  s@0;&quot;</span>,</span>
+<span id="cb31-4"><a href="exercise-1-latent-growth-mixture-modeling.html#cb31-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">model_class_specific =</span> <span class="st">&quot;i;  s;&quot;</span>,</span>
+<span id="cb31-5"><a href="exercise-1-latent-growth-mixture-modeling.html#cb31-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">rdata =</span> data, <span class="at">OUTPUT =</span> <span class="st">&quot;tech8 tech11 tech14;&quot;</span>,</span>
+<span id="cb31-6"><a href="exercise-1-latent-growth-mixture-modeling.html#cb31-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">usevariables =</span> <span class="fu">c</span>(<span class="st">&quot;ALC1YR1&quot;</span>, <span class="st">&quot;ALC1YR2&quot;</span>, <span class="st">&quot;ALC1YR3&quot;</span>),</span>
+<span id="cb31-7"><a href="exercise-1-latent-growth-mixture-modeling.html#cb31-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">ANALYSIS =</span> <span class="st">&quot;PROCESSORS = 4;&quot;</span>,</span>
+<span id="cb31-8"><a href="exercise-1-latent-growth-mixture-modeling.html#cb31-8" aria-hidden="true" tabindex="-1"></a>                             <span class="at">run =</span> 1L)</span></code></pre></div>
+</div>
+<div id="d.-visualizing-growth-models." class="section level3" number="3.1.4">
+<h3><span class="header-section-number">3.1.4</span> 1d. Visualizing growth models.</h3>
+<p>Plotting the model-predicted trajectories makes it easier to interpret the model. Moreover, visualizing the raw data provides yet another way to evaluate the fit of your mixture model to the data. With this in mind, plot the four models you created in exercise <em>1c</em>, and interpret what you see. First, plot only the predicted trajectories. Then, plot raw data as well. Explain the benefit of plotting the raw data in your own words.</p>
+<p> Because the scales in the alcohol data are ordinal, many of the observed trajectories overlap. To prevent ‘overplotting,’ you can jitter the observed trajectories by a fraction of their standard deviation. Even as little as jitter_lines = .1, jittering the positions on the y-axis by 1/10th of a standard deviation, can make a difference.</p>
+<details>
+<summary>
+<b>Click to show answers</b>
+</summary>
+<p>Plotting the raw data helps us understand how representative the average trajectory for each class captures the individual trajectories of individuals in that class. It helps us see how separable the classes are visually, instead of just relying on statistics like entropy.</p>
+<p>The resulting plot should look like this:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="exercise-1-latent-growth-mixture-modeling.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotGrowthMixtures</span>(results_1c, <span class="at">rawdata =</span> <span class="cn">TRUE</span>, <span class="at">jitter_lines =</span> .<span class="dv">1</span>)</span></code></pre></div>
+<p><img src="TCSM_files/figure-html/plot_gmm-1.png" width="432" style="display: block; margin: auto;" /></p>
+</div>
+<div id="e.-the-3-step-model." class="section level3" number="3.1.5">
+<h3><span class="header-section-number">3.1.5</span> 1e. The 3-step model.</h3>
+<p>Covariates are often added to mixture models, to predict 1) class membership 2) to explain variation in the growth parameters within the classes or 3) as a distal outcome.</p>
+<p>Whenever covariates are however added to the model, they change the Latent Class solution. Sometimes, this is fine, as the covariates can help to improve the classification. In other cases, you would use a 3-step approach, which Mplus has automated:</p>
+<ol style="list-style-type: decimal">
+<li>Fit an unconditional Latent Class Model (without covariates)</li>
+<li>A “most likely class variable” is created using the posterior distribution of step 1.</li>
+<li>This most likely class variable is then regressed on (a) covariate.</li>
+</ol>
+<p>There are a few options for how to do 3-step analysis. They all rely on adding to the <code>Variable:</code> command.
+For more info, see <a href="https://www.statmodel.com/download/webnotes/webnote15.pdf" class="uri">https://www.statmodel.com/download/webnotes/webnote15.pdf</a>.</p>
+<div id="commands-for-conducting-a-3-step-model" class="section level4" number="3.1.5.1">
+<h4><span class="header-section-number">3.1.5.1</span> Commands for conducting a 3-step model</h4>
+<p>You can add the following options to the <code>Variable:</code> command:</p>
+<ol style="list-style-type: decimal">
+<li><code>Auxiliary = x(R);</code><br />
+This is actually a 1-step method for predicting latent class memberships using Pseudo-Class draws.</li>
+<li><code>Auxiliary = x(R3step);</code><br />
+A 3 step procedure, where covariates predict the latent class</li>
+<li><code>Auxiliary = y(e)</code><br />
+A 1-step method, where the latent class predicts a continuous distal outcome.</li>
+<li><code>Auxiliary = y(de3step);</code><br />
+A 3 step procedure, where latent class predicts continuous covariates (distal outcome) with unequal means and equal variances</li>
+<li><code>Auxiliary = y(du3step);</code><br />
+A 3 step procedure, where latent class predicts continuous covariates (distal outcome) with unequal means and variances</li>
+<li><code>Auxiliary = Y(dcon);</code><br />
+Procedure for continuous distal outcomes as suggested by Lanza et al (2013)</li>
+<li><code>Auxiliary = Y(dcon);</code><br />
+Procedure for categorical distal outcomes as suggested by Lanza et al (2013)</li>
+<li><code>Auxiliary = y(BCH);</code><br />
+Improved and currently best 3-step procedure with continuous covariates as distal outcomes</li>
+</ol>
+<p>Pick your final model from 1c, and add both age and gender as auxiliary variables in the model. Try to think what 3-step model you want, and if you are not sure, run different models, so you can evaluate how the different procedures make a difference. You can do this by editing the Mplus file, or by adding the <code>VARIABLE = "Auxiliary = ...;",</code> to your call to <code>createMixtures()</code>. What is the effect of both age and gender?</p>
+<p><em>Note: The results can be extracted using the</em> <code>get_lcCondMeans()</code> <em>function.</em></p>
+<details>
+<summary>
+<b>Click to show answers</b>
+</summary>
+<p>I’m providing an example using the BCH 3-step procedure below. It can be seen, from the overall test and the pairwise comparisons, that the third group is significantly older, and has a significantly lower proportion of girls than the other two classes.</p>
+<p>The resulting syntax and output should look like this:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-1" aria-hidden="true" tabindex="-1"></a>results_1e <span class="ot">&lt;-</span> <span class="fu">createMixtures</span>(<span class="at">classes =</span> <span class="dv">3</span>, <span class="at">filename_stem =</span> <span class="st">&quot;1e&quot;</span>, </span>
+<span id="cb33-2"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">model_overall =</span> <span class="st">&quot;i s | ALC1YR1@0 ALC1YR2@1 ALC1YR3@2;</span></span>
+<span id="cb33-3"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="st">                                              i@0;  s@0;&quot;</span>,</span>
+<span id="cb33-4"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">model_class_specific =</span> <span class="st">&quot;i;  s;&quot;</span>,</span>
+<span id="cb33-5"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-5" aria-hidden="true" tabindex="-1"></a>                             <span class="at">rdata =</span> data, <span class="at">OUTPUT =</span> <span class="st">&quot;tech8 tech11 tech14;&quot;</span>,</span>
+<span id="cb33-6"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">usevariables =</span> <span class="fu">c</span>(<span class="st">&quot;ALC1YR1&quot;</span>, <span class="st">&quot;ALC1YR2&quot;</span>, <span class="st">&quot;ALC1YR3&quot;</span>,</span>
+<span id="cb33-7"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-7" aria-hidden="true" tabindex="-1"></a>                                              <span class="st">&quot;AGE1&quot;</span>, <span class="st">&quot;GENDER1&quot;</span>),</span>
+<span id="cb33-8"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-8" aria-hidden="true" tabindex="-1"></a>                             <span class="at">VARIABLE =</span> <span class="st">&quot;Auxiliary = AGE1(BCH)  GENDER1(BCH);&quot;</span>,</span>
+<span id="cb33-9"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">ANALYSIS =</span> <span class="st">&quot;PROCESSORS = 4;&quot;</span>,</span>
+<span id="cb33-10"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-10" aria-hidden="true" tabindex="-1"></a>                             <span class="at">run =</span> 1L)</span>
+<span id="cb33-11"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="co"># The results of the conditional means test are inside the output object</span></span>
+<span id="cb33-13"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="co"># But you have to dig a little bit. The code to get them is:</span></span>
+<span id="cb33-14"><a href="exercise-1-latent-growth-mixture-modeling.html#cb33-14" aria-hidden="true" tabindex="-1"></a><span class="fu">get_lcCondMeans</span>(results_1e)</span></code></pre></div>
+<pre><code>## $overall
+##       var    m.1  se.1    m.2  se.2    m.3  se.3 chisq df     p
+## 1    AGE1 14.809 0.227 15.308 0.114 15.949 0.107  25.7  2     0
+## 2 GENDER1  0.484 0.063  0.459 0.037  0.296 0.042 9.421  2 0.009
+## 
+## $pairwise
+##       var classA classB  chisq df     p
+## 1    AGE1      1      2  3.556 NA 0.059
+## 2    AGE1      1      3 18.336 NA 0.000
+## 3    AGE1      2      3 15.458 NA 0.000
+## 4 GENDER1      1      2  0.109 NA 0.741
+## 5 GENDER1      1      3  5.557 NA 0.018
+## 6 GENDER1      2      3  7.789 NA 0.005
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;mplus.auxE&quot; &quot;list&quot;</code></pre>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="day-3-latent-growth-mixture-modeling.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="exercise-2-latent-transition-analysis-lta.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["TCSM.pdf"],
+"toc": {
+"collapse": "section"
+},
+"search": true
+});
+});
+</script>
+
+</body>
+
+</html>

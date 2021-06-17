@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>1.2 Getting the course data | S23 Summer School</title>
+  <title>2.4 Exercise 4: latent growth model on GPA data | S23 Summer School</title>
   <meta name="description" content="This is a guide for the Advanced Course on using Mplus." />
   <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="1.2 Getting the course data | S23 Summer School" />
+  <meta property="og:title" content="2.4 Exercise 4: latent growth model on GPA data | S23 Summer School" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="1.2 Getting the course data | S23 Summer School" />
+  <meta name="twitter:title" content="2.4 Exercise 4: latent growth model on GPA data | S23 Summer School" />
   
   <meta name="twitter:description" content="This is a guide for the Advanced Course on using Mplus." />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="installing-software.html"/>
-<link rel="next" href="r-tutorial-for-beginners-optional.html"/>
+<link rel="prev" href="exercise-3-level-and-shape-parameterization.html"/>
+<link rel="next" href="day-3-latent-growth-mixture-modeling.html"/>
 <script src="libs/header-attrs-2.7/header-attrs.js"></script>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
@@ -243,19 +243,281 @@ div.csl-indent {
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="getting-the-course-data" class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> Getting the course data</h2>
-<p>All of the course data files are available on a GitHub repository. You can download them all at once by going to <a href="https://github.com/cjvanlissa/TCSM_student" class="uri">https://github.com/cjvanlissa/TCSM_student</a>, clicking the green button labeled ‘Code,’ and downloading a ZIP archive of the repository.</p>
-<p><img src="coursematerials.png" /></p>
-<p>After unzipping the archive, you can open the RStudio project ‘TCSM_student.Rproj,’ and the script ‘run_me.R.’ This script contains a few lines of code to help you install the required R-packages for the course.</p>
+<div id="exercise-4-latent-growth-model-on-gpa-data" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Exercise 4: latent growth model on GPA data</h2>
+<div id="exercise-4a" class="section level3" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> Exercise 4a</h3>
+<p>Continuing with the data used for the previous exercise, set up a latent growth model for GPA for the 6 consecutive occasions and run this model. Obtain the following parameters:</p>
+<ul>
+<li>AIC/BIC, Chi Square, RMSEA, CFI/TLI</li>
+<li>Mean Intercept and Slope</li>
+<li>Variance of the Intercept and Slope</li>
+</ul>
+<details>
+<summary>
+<b>Click to show answers</b>
+</summary>
+<p>This can be done as follows, using m3 as starting point:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-1" aria-hidden="true" tabindex="-1"></a>m4 <span class="ot">&lt;-</span> m3</span>
+<span id="cb22-2"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-2" aria-hidden="true" tabindex="-1"></a>m4<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="st">&quot;i s | gpa1@0 gpa2@1 gpa3@2 gpa4@3 gpa5@4 gpa6@5;&quot;</span></span>
+<span id="cb22-3"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-3" aria-hidden="true" tabindex="-1"></a>m4<span class="sc">$</span>modelout <span class="ot">&lt;-</span> <span class="st">&quot;m4.inp&quot;</span></span>
+<span id="cb22-4"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-4" aria-hidden="true" tabindex="-1"></a>res_4 <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(m4, <span class="at">run =</span> 1L)</span>
+<span id="cb22-5"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the requested fit indices:</span></span>
+<span id="cb22-6"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">get_summaries</span>(res_4)[<span class="fu">c</span>(<span class="st">&quot;AIC&quot;</span>, <span class="st">&quot;BIC&quot;</span>, <span class="st">&quot;ChiSqM_Value&quot;</span>, <span class="st">&quot;RMSEA_Estimate&quot;</span>, <span class="st">&quot;CFI&quot;</span>, <span class="st">&quot;TLI&quot;</span>)]</span>
+<span id="cb22-7"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Get all columns of results</span></span>
+<span id="cb22-8"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-8" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table_results</span>(res_4, <span class="at">columns =</span> <span class="cn">NULL</span>)</span>
+<span id="cb22-9"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only regressions on I and S</span></span>
+<span id="cb22-10"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-10" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[tab<span class="sc">$</span>lhs <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;I&quot;</span>, <span class="st">&quot;S&quot;</span>) <span class="sc">&amp;</span> tab<span class="sc">$</span>op <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;~~&quot;</span>, <span class="st">&quot;~1&quot;</span>), ]</span>
+<span id="cb22-11"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-11" aria-hidden="true" tabindex="-1"></a>tab[, <span class="fu">c</span>(<span class="st">&quot;label&quot;</span>, <span class="st">&quot;est_sig&quot;</span>, <span class="st">&quot;pval&quot;</span>, <span class="st">&quot;confint&quot;</span>)]</span></code></pre></div>
+Running model: m4.inp
+System command: C:.exe /c cd "C:_Repositories23" &amp;&amp; “Mplus” “m4.inp”
+Reading model: m4.out
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["AIC"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["BIC"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_Value"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["RMSEA_Estimate"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["CFI"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["TLI"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"120.77","2":"157.052","3":"43.945","4":"0.093","5":"0.965","6":"0.967"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+label
+</th>
+<th style="text-align:left;">
+est_sig
+</th>
+<th style="text-align:left;">
+pval
+</th>
+<th style="text-align:left;">
+confint
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+S.WITH.I
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+0.12
+</td>
+<td style="text-align:left;">
+[-0.00, 0.01]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Means.I
+</td>
+<td style="text-align:left;">
+2.60***
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+[ 2.56, 2.63]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Means.S
+</td>
+<td style="text-align:left;">
+0.11***
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+[ 0.10, 0.12]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Variances.I
+</td>
+<td style="text-align:left;">
+0.04***
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+[ 0.02, 0.05]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Variances.S
+</td>
+<td style="text-align:left;">
+0.00***
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+[ 0.00, 0.00]
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="exercise-4b" class="section level3" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> Exercise 4b</h3>
+<p>Then, set up a latent growth model for 3 years where each year is a latent variable measured by the GPA of two
+consecutive semesters.</p>
+<p>The factor loadings for GPA2, GPA4 and GPA6 ought to be constrained to be equal with a label (a) behind
+the loading in the syntax. As such, the scores relate in the same way to the year score over time. The GPA
+intercepts are constrained at 0.</p>
+<p>If you get the error message below, can you find out what the problem is?</p>
+<pre><code>WARNING:  THE LATENT VARIABLE COVARIANCE MATRIX (PSI) IS NOT POSITIVE     DEFINITE. THIS 
+COULD INDICATE A NEGATIVE VARIANCE/RESIDUAL VARIANCE FOR A LATENT VARIABLE, A CORRELATION 
+GREATER OR EQUAL TO ONE BETWEEN TWO LATENT VARIABLES, OR A LINEAR DEPENDENCY AMONG MORE 
+THAN TWO LATENT VARIABLES. CHECK THE TECH4 OUTPUT FOR MORE INFORMATION. </code></pre>
+<p>A rough way to deal with this problem may be to fix the problematic parameter to a particular value (ie. .001), try this and re-run the model.</p>
+<p>Now examine the same parameters as for exercise 3a, and compare the two. Are there
+major differences?</p>
+<ul>
+<li>AIC/BIC, Chi Square, RMSEA, CFI/TLI</li>
+<li>Mean Intercept and Slope</li>
+<li>Variance of the Intercept and Slope</li>
+</ul>
+<details>
+<summary>
+<b>Click to show answers</b>
+</summary>
+<p>This can be done as follows, using m3 as starting point:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-1" aria-hidden="true" tabindex="-1"></a>m4b <span class="ot">&lt;-</span> m4</span>
+<span id="cb24-2"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-2" aria-hidden="true" tabindex="-1"></a>m4b<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="st">&quot;year1 by gpa1@1 gpa2 (a);</span></span>
+<span id="cb24-3"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="st">             year2 by gpa3@1 gpa4 (a); </span></span>
+<span id="cb24-4"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="st">             year3 by gpa5@1 gpa6 (a);</span></span>
+<span id="cb24-5"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="st">             [gpa1@0 gpa2@0 gpa3@0 gpa4@0 gpa5@0 gpa6@0];</span></span>
+<span id="cb24-6"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="st">             i s | year1@0 year2@1 year3@2;</span></span>
+<span id="cb24-7"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="st">             [i s];</span></span>
+<span id="cb24-8"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="st">             year3@.001;&quot;</span></span>
+<span id="cb24-9"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-9" aria-hidden="true" tabindex="-1"></a>res_4b <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(m4b, <span class="at">run =</span> 1L)</span>
+<span id="cb24-10"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the requested fit indices:</span></span>
+<span id="cb24-11"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="fu">get_summaries</span>(res_4b)[<span class="fu">c</span>(<span class="st">&quot;AIC&quot;</span>, <span class="st">&quot;BIC&quot;</span>, <span class="st">&quot;ChiSqM_Value&quot;</span>, <span class="st">&quot;RMSEA_Estimate&quot;</span>, <span class="st">&quot;CFI&quot;</span>, <span class="st">&quot;TLI&quot;</span>)]</span>
+<span id="cb24-12"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Get all columns of results</span></span>
+<span id="cb24-13"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-13" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table_results</span>(res_4b, <span class="at">columns =</span> <span class="cn">NULL</span>)</span>
+<span id="cb24-14"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only regressions on I and S</span></span>
+<span id="cb24-15"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-15" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[tab<span class="sc">$</span>lhs <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;I&quot;</span>, <span class="st">&quot;S&quot;</span>) <span class="sc">&amp;</span> tab<span class="sc">$</span>op <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;~~&quot;</span>, <span class="st">&quot;~1&quot;</span>), ]</span>
+<span id="cb24-16"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-16" aria-hidden="true" tabindex="-1"></a>tab[, <span class="fu">c</span>(<span class="st">&quot;label&quot;</span>, <span class="st">&quot;est_sig&quot;</span>, <span class="st">&quot;pval&quot;</span>, <span class="st">&quot;confint&quot;</span>)]</span></code></pre></div>
+Running model: m4.inp
+System command: C:.exe /c cd "C:_Repositories23" &amp;&amp; “Mplus” “m4.inp”
+Reading model: m4.out
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["AIC"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["BIC"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_Value"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["RMSEA_Estimate"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["CFI"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["TLI"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"130.485","2":"176.661","3":"47.66","4":"0.115","5":"0.956","6":"0.95"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+label
+</th>
+<th style="text-align:left;">
+est_sig
+</th>
+<th style="text-align:left;">
+pval
+</th>
+<th style="text-align:left;">
+confint
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+S.WITH.I
+</td>
+<td style="text-align:left;">
+0.01***
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+[ 0.01, 0.02]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Means.I
+</td>
+<td style="text-align:left;">
+2.60***
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+[ 2.56, 2.64]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Means.S
+</td>
+<td style="text-align:left;">
+0.21***
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+[ 0.19, 0.23]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Variances.I
+</td>
+<td style="text-align:left;">
+0.03***
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+[ 0.02, 0.04]
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Variances.S
+</td>
+<td style="text-align:left;">
+0.01**
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+<td style="text-align:left;">
+[ 0.00, 0.01]
+</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+<!-- </div> -->
             </section>
 
           </div>
         </div>
       </div>
-<a href="installing-software.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="r-tutorial-for-beginners-optional.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="exercise-3-level-and-shape-parameterization.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="day-3-latent-growth-mixture-modeling.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

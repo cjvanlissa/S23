@@ -12,3 +12,12 @@ rsconnect
 *.pdf
 *.RData
 TCSM_student/
+*.dat
+!DatingSex.dat
+!DDS8_1.dat
+!GPA.dat
+!PTSD.dat
+*.inp
+*.out
+*.log
+*.gh5
