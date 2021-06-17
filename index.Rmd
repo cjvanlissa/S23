@@ -26,4 +26,6 @@ description: "This is a guide for the Advanced Course on using Mplus."
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(warning=FALSE, message=FALSE)
 ```
-This is a five-day course on structural equation modeling (SEM) using Mplus. If you already know how to analyse your data in Mplus but want to learn more about what you are actually doing, and especially if you want to know more about advanced longitudinal analyses, this course is for you. The course consists of in-depth lectures on the fundamentals of Mplus and advanced longitudinal models.
+
+This course material is part of the [Advanced Course on using Mplus](https://utrechtsummerschool.nl/courses/social-sciences/advanced-course-on-using-mplus),
+a five-day summer school course hosted by Utrecht University's department of Methodology and Statistics. If you already know how to analyse your data in Mplus but want to learn more about what you are actually doing, and especially if you want to know more about advanced longitudinal analyses, this course is for you. The course consists of in-depth lectures on the fundamentals of Mplus and advanced longitudinal models.

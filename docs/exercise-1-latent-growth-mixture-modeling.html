@@ -123,28 +123,6 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 <link rel="stylesheet" href="font-awesome.min.css" type="text/css" />
@@ -160,7 +138,7 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./index.html">TCSM</a></li>
+<li><a href="./index.html">Home</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Course</a></li>
@@ -185,7 +163,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.1" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html"><i class="fa fa-check"></i><b>2.1</b> Exercise 1: burn survivors</a>
 <ul>
-<li class="chapter" data-level="2.1.1" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html#exercise-1a-find-the-best-lgm-model"><i class="fa fa-check"></i><b>2.1.1</b> Exercise 1a: Find the best LGM model</a></li>
+<li class="chapter" data-level="2.1.1" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html#exercise-1a"><i class="fa fa-check"></i><b>2.1.1</b> Exercise 1a</a></li>
 <li class="chapter" data-level="2.1.2" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html#exercise-1b-add-covariates"><i class="fa fa-check"></i><b>2.1.2</b> Exercise 1b: Add covariates</a></li>
 </ul></li>
 <li class="chapter" data-level="2.2" data-path="exercise-2-alcohol-use.html"><a href="exercise-2-alcohol-use.html"><i class="fa fa-check"></i><b>2.2</b> Exercise 2: Alcohol use</a>
@@ -249,7 +227,7 @@ div.csl-indent {
 <h3><span class="header-section-number">3.1.1</span> 1a. Latent Class Growth Models.</h3>
 <p>Set up the growth curve model as depicted in Figure 1 in Mplus, using the | notation. Use the file DDS8_1.dat for this.</p>
 <div class="figure">
-<img src="./Materials/Figure1_lgm_alcohol.png" width="400" alt="" />
+<img src="Materials/Figure1_lgm_alcohol.png" width="400" alt="" />
 <p class="caption">Latent Growth model for alcohol</p>
 </div>
 <p>First, load the file <code>DDS8_1.dat</code> into the R environment. For convenience’s sake, rename the columns of the data object to something a human would understand:</p>
@@ -593,7 +571,7 @@ The script below demonstrates how to plot a model using <code>tidySEM</code>.</p
 <span id="cb28-3"><a href="exercise-1-latent-growth-mixture-modeling.html#cb28-3" aria-hidden="true" tabindex="-1"></a>lo <span class="ot">&lt;-</span> <span class="fu">get_layout</span>(<span class="st">&quot;I&quot;</span>,       <span class="st">&quot;&quot;</span>,        <span class="st">&quot;S&quot;</span>,</span>
 <span id="cb28-4"><a href="exercise-1-latent-growth-mixture-modeling.html#cb28-4" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;ALC1YR1&quot;</span>, <span class="st">&quot;ALC1YR2&quot;</span>, <span class="st">&quot;ALC1YR3&quot;</span>, <span class="at">rows =</span> <span class="dv">2</span>)</span>
 <span id="cb28-5"><a href="exercise-1-latent-growth-mixture-modeling.html#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="fu">graph_sem</span>(results_1a[[<span class="dv">1</span>]], <span class="at">layout =</span> lo, <span class="at">angle =</span> <span class="dv">179</span>)</span></code></pre></div>
-<p><img src="TCSM_files/figure-html/demotidysem-1.png" width="672" /></p>
+<p><img src="S23_files/figure-html/demotidysem-1.png" width="672" /></p>
 </div>
 </div>
 <div id="b.-increasing-random-starts" class="section level3" number="3.1.2">
@@ -943,7 +921,7 @@ NA
 <p>Plotting the raw data helps us understand how representative the average trajectory for each class captures the individual trajectories of individuals in that class. It helps us see how separable the classes are visually, instead of just relying on statistics like entropy.</p>
 <p>The resulting plot should look like this:</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="exercise-1-latent-growth-mixture-modeling.html#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plotGrowthMixtures</span>(results_1c, <span class="at">rawdata =</span> <span class="cn">TRUE</span>, <span class="at">jitter_lines =</span> .<span class="dv">1</span>)</span></code></pre></div>
-<p><img src="TCSM_files/figure-html/plot_gmm-1.png" width="432" style="display: block; margin: auto;" /></p>
+<p><img src="S23_files/figure-html/plot_gmm-1.png" width="432" style="display: block; margin: auto;" /></p>
 </div>
 <div id="e.-the-3-step-model." class="section level3" number="3.1.5">
 <h3><span class="header-section-number">3.1.5</span> 1e. The 3-step model.</h3>
@@ -1067,7 +1045,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["TCSM.pdf"],
+"download": ["S23.pdf"],
 "toc": {
 "collapse": "section"
 },

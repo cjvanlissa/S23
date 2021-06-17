@@ -123,28 +123,6 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 <link rel="stylesheet" href="font-awesome.min.css" type="text/css" />
@@ -160,7 +138,7 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./index.html">TCSM</a></li>
+<li><a href="./index.html">Home</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Course</a></li>
@@ -185,7 +163,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.1" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html"><i class="fa fa-check"></i><b>2.1</b> Exercise 1: burn survivors</a>
 <ul>
-<li class="chapter" data-level="2.1.1" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html#exercise-1a-find-the-best-lgm-model"><i class="fa fa-check"></i><b>2.1.1</b> Exercise 1a: Find the best LGM model</a></li>
+<li class="chapter" data-level="2.1.1" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html#exercise-1a"><i class="fa fa-check"></i><b>2.1.1</b> Exercise 1a</a></li>
 <li class="chapter" data-level="2.1.2" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html#exercise-1b-add-covariates"><i class="fa fa-check"></i><b>2.1.2</b> Exercise 1b: Add covariates</a></li>
 </ul></li>
 <li class="chapter" data-level="2.2" data-path="exercise-2-alcohol-use.html"><a href="exercise-2-alcohol-use.html"><i class="fa fa-check"></i><b>2.2</b> Exercise 2: Alcohol use</a>
@@ -247,7 +225,7 @@ div.csl-indent {
 <h2><span class="header-section-number">2.2</span> Exercise 2: Alcohol use</h2>
 <p>The figure below depicts the basic Latent Growth model for the alcohol use data from Duncan, Duncan &amp; Strycker example 8_1.</p>
 <div class="figure">
-<img src="./Materials/Figure1_lgm_alcohol.png" width="400" alt="" />
+<img src="Materials/Figure1_lgm_alcohol.png" width="400" alt="" />
 <p class="caption">Latent Growth model for alcohol</p>
 </div>
 <p>The data are in the file <code>DDS8_1.dat</code>, with variables ALC1YR1 ALC1YR2 ALC1YR3 ALCPROB5 AGE1 and
@@ -258,8 +236,8 @@ year 5 of the study (0=no, 1=yes).</p>
 <span id="cb10-2"><a href="exercise-2-alcohol-use.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ALC1YR1&quot;</span>, <span class="st">&quot;ALC1YR2&quot;</span>, <span class="st">&quot;ALC1YR3&quot;</span>, <span class="st">&quot;ALCPROB5&quot;</span>, <span class="st">&quot;AGE1&quot;</span>, <span class="st">&quot;GENDER1&quot;</span>)</span></code></pre></div>
 <div id="exercise-2a" class="section level3" number="2.2.1">
 <h3><span class="header-section-number">2.2.1</span> Exercise 2a</h3>
-<p>Set up the growth curve model as depicted in Figure 1 in Mplus.
-As a starting point, use either the basic syntax file “LGA8 – M0.inp” or the <code>MplusAutomation</code> code below.</p>
+<p>Set up the growth curve model as depicted in the Figure in Mplus.
+As a starting point, use the <code>MplusAutomation</code> code below.</p>
 <ul>
 <li>Add the necessary syntax statements to finalize the syntax.</li>
 <li>Request sample statistics and standardized (STDYX) output.</li>
@@ -676,7 +654,7 @@ i WITH <a href="mailto:s@0" class="email">s@0</a>;
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="exercise-2-alcohol-use.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the BICs and annotate with the syntax to see which model is best</span></span>
 <span id="cb14-2"><a href="exercise-2-alcohol-use.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
 <span id="cb14-3"><a href="exercise-2-alcohol-use.html#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>, <span class="at">y =</span> tab<span class="sc">$</span>BIC) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="at">label =</span> tab<span class="sc">$</span>Model, <span class="at">size =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="TCSM_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="S23_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p>It looks like, paradoxically, predicting I and S from either age or gender
 has the best fit. However, note that there is only a small difference between
 the smallest and the largest BIC: diff(range(tab$BIC)).
@@ -739,7 +717,7 @@ prefer the simpler (no direct effects) model. There is full mediation.</p>
 <span id="cb16-2"><a href="exercise-2-alcohol-use.html#cb16-2" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;&quot;</span>,        <span class="st">&quot;I&quot;</span>,  <span class="st">&quot;ALCPROB5&quot;</span>,</span>
 <span id="cb16-3"><a href="exercise-2-alcohol-use.html#cb16-3" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;GENDER1&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="at">rows =</span> <span class="dv">3</span>)</span>
 <span id="cb16-4"><a href="exercise-2-alcohol-use.html#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">graph_sem</span>(result_ind, <span class="at">layout =</span> lo)</span></code></pre></div>
-<p><img src="TCSM_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p><img src="S23_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
 </div>
 </div>
             </section>
@@ -791,7 +769,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["TCSM.pdf"],
+"download": ["S23.pdf"],
 "toc": {
 "collapse": "section"
 },

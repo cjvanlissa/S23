@@ -123,28 +123,6 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
-<style type="text/css">
-/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-}
-.hanging div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}
-</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 <link rel="stylesheet" href="font-awesome.min.css" type="text/css" />
@@ -160,7 +138,7 @@ div.csl-indent {
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./index.html">TCSM</a></li>
+<li><a href="./index.html">Home</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Course</a></li>
@@ -185,7 +163,7 @@ div.csl-indent {
 <ul>
 <li class="chapter" data-level="2.1" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html"><i class="fa fa-check"></i><b>2.1</b> Exercise 1: burn survivors</a>
 <ul>
-<li class="chapter" data-level="2.1.1" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html#exercise-1a-find-the-best-lgm-model"><i class="fa fa-check"></i><b>2.1.1</b> Exercise 1a: Find the best LGM model</a></li>
+<li class="chapter" data-level="2.1.1" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html#exercise-1a"><i class="fa fa-check"></i><b>2.1.1</b> Exercise 1a</a></li>
 <li class="chapter" data-level="2.1.2" data-path="exercise-1-burn-survivors.html"><a href="exercise-1-burn-survivors.html#exercise-1b-add-covariates"><i class="fa fa-check"></i><b>2.1.2</b> Exercise 1b: Add covariates</a></li>
 </ul></li>
 <li class="chapter" data-level="2.2" data-path="exercise-2-alcohol-use.html"><a href="exercise-2-alcohol-use.html"><i class="fa fa-check"></i><b>2.2</b> Exercise 2: Alcohol use</a>
@@ -269,9 +247,6 @@ div.csl-indent {
 <span id="cb22-9"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only regressions on I and S</span></span>
 <span id="cb22-10"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-10" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[tab<span class="sc">$</span>lhs <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;I&quot;</span>, <span class="st">&quot;S&quot;</span>) <span class="sc">&amp;</span> tab<span class="sc">$</span>op <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;~~&quot;</span>, <span class="st">&quot;~1&quot;</span>), ]</span>
 <span id="cb22-11"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-11" aria-hidden="true" tabindex="-1"></a>tab[, <span class="fu">c</span>(<span class="st">&quot;label&quot;</span>, <span class="st">&quot;est_sig&quot;</span>, <span class="st">&quot;pval&quot;</span>, <span class="st">&quot;confint&quot;</span>)]</span></code></pre></div>
-Running model: m4.inp
-System command: C:.exe /c cd "C:_Repositories23" &amp;&amp; “Mplus” “m4.inp”
-Reading model: m4.out
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["AIC"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["BIC"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_Value"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["RMSEA_Estimate"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["CFI"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["TLI"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"120.77","2":"157.052","3":"43.945","4":"0.093","5":"0.965","6":"0.967"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -409,9 +384,6 @@ major differences?</p>
 <span id="cb24-14"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only regressions on I and S</span></span>
 <span id="cb24-15"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-15" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[tab<span class="sc">$</span>lhs <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;I&quot;</span>, <span class="st">&quot;S&quot;</span>) <span class="sc">&amp;</span> tab<span class="sc">$</span>op <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;~~&quot;</span>, <span class="st">&quot;~1&quot;</span>), ]</span>
 <span id="cb24-16"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-16" aria-hidden="true" tabindex="-1"></a>tab[, <span class="fu">c</span>(<span class="st">&quot;label&quot;</span>, <span class="st">&quot;est_sig&quot;</span>, <span class="st">&quot;pval&quot;</span>, <span class="st">&quot;confint&quot;</span>)]</span></code></pre></div>
-Running model: m4.inp
-System command: C:.exe /c cd "C:_Repositories23" &amp;&amp; “Mplus” “m4.inp”
-Reading model: m4.out
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["AIC"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["BIC"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_Value"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["RMSEA_Estimate"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["CFI"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["TLI"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"130.485","2":"176.661","3":"47.66","4":"0.115","5":"0.956","6":"0.95"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -560,7 +532,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["TCSM.pdf"],
+"download": ["S23.pdf"],
 "toc": {
 "collapse": "section"
 },

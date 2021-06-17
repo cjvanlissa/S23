@@ -14,7 +14,7 @@ create-a-new-r-script
 what-do-the-four-panes-do
 day-2-latent-growth-models
 exercise-1-burn-survivors
-exercise-1a-find-the-best-lgm-model
+exercise-1a
 exercise-1b-add-covariates
 visualization
 tabulating-results
@@ -46,4 +46,3 @@ b.-class-proportions-and-transition-probabilities
 c.-adding-control-variables-optional
 d.-extend-the-model-to-a-mover-stayer-model-optional
 e.-selecting-the-number-of-classes-optional
-exercise-1a
