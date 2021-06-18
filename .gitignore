@@ -21,3 +21,4 @@ TCSM_student/
 *.out
 *.log
 *.gh5
+!S23.pdf
