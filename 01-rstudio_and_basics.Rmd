@@ -50,11 +50,6 @@ install.packages("tidySEM")
 install.packages("semTools")
 ```
 
-```{block, type='rmdachtung'}
-Don't forget to put the package names in `""`. Otherwise, you will get an error message.
-```
-
-
 <br><br>
 
 ### Get started

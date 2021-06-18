@@ -233,7 +233,8 @@ GENDER1. Missing values are coded as -99. The variable ALCPROB5 is categorical, 
 year 5 of the study (0=no, 1=yes).</p>
 <p>First, load the file <code>DDS8_1.dat</code> into the R environment. For convenience’s sake, rename the columns of the data object to something a human would understand:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="exercise-2-alcohol-use.html#cb10-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;DDS8_1.dat&quot;</span>, <span class="at">na.strings =</span> <span class="sc">-</span><span class="dv">99</span>)</span>
-<span id="cb10-2"><a href="exercise-2-alcohol-use.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ALC1YR1&quot;</span>, <span class="st">&quot;ALC1YR2&quot;</span>, <span class="st">&quot;ALC1YR3&quot;</span>, <span class="st">&quot;ALCPROB5&quot;</span>, <span class="st">&quot;AGE1&quot;</span>, <span class="st">&quot;GENDER1&quot;</span>)</span></code></pre></div>
+<span id="cb10-2"><a href="exercise-2-alcohol-use.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;ALC1YR1&quot;</span>, <span class="st">&quot;ALC1YR2&quot;</span>, <span class="st">&quot;ALC1YR3&quot;</span>,</span>
+<span id="cb10-3"><a href="exercise-2-alcohol-use.html#cb10-3" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;ALCPROB5&quot;</span>, <span class="st">&quot;AGE1&quot;</span>, <span class="st">&quot;GENDER1&quot;</span>)</span></code></pre></div>
 <div id="exercise-2a" class="section level3" number="2.2.1">
 <h3><span class="header-section-number">2.2.1</span> Exercise 2a</h3>
 <p>Set up the growth curve model as depicted in the Figure in Mplus.
@@ -293,47 +294,57 @@ Then use the AIC and BIC to identify the best-fitting model,
 and assess how different the model fits are.
 Also consider using RMSEA, CFI, TLI, and SRMR to make sure that your best-fitting
 model has acceptable objective fit.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="exercise-2-alcohol-use.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a vector with three &quot;additional syntaxes&quot; for my three different models</span></span>
-<span id="cb13-2"><a href="exercise-2-alcohol-use.html#cb13-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;i s ON GENDER1;&quot;</span>,</span>
-<span id="cb13-3"><a href="exercise-2-alcohol-use.html#cb13-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;i s ON AGE1;&quot;</span>,</span>
-<span id="cb13-4"><a href="exercise-2-alcohol-use.html#cb13-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;i s ON AGE1 GENDER1;&quot;</span>,</span>
-<span id="cb13-5"><a href="exercise-2-alcohol-use.html#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;i ON GENDER1;&quot;</span>,</span>
-<span id="cb13-6"><a href="exercise-2-alcohol-use.html#cb13-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;i ON AGE1;&quot;</span>,</span>
-<span id="cb13-7"><a href="exercise-2-alcohol-use.html#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;i ON AGE1 GENDER1;&quot;</span>,</span>
-<span id="cb13-8"><a href="exercise-2-alcohol-use.html#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;s ON GENDER1;&quot;</span>,</span>
-<span id="cb13-9"><a href="exercise-2-alcohol-use.html#cb13-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;s ON AGE1;&quot;</span>,</span>
-<span id="cb13-10"><a href="exercise-2-alcohol-use.html#cb13-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;s ON AGE1 GENDER1;&quot;</span>,</span>
-<span id="cb13-11"><a href="exercise-2-alcohol-use.html#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;i WITH s@0;&quot;</span>,</span>
-<span id="cb13-12"><a href="exercise-2-alcohol-use.html#cb13-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;!baseline&quot;</span>)</span>
-<span id="cb13-13"><a href="exercise-2-alcohol-use.html#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a list with the additional usevariables used in the three models above</span></span>
-<span id="cb13-14"><a href="exercise-2-alcohol-use.html#cb13-14" aria-hidden="true" tabindex="-1"></a>vars <span class="ot">=</span> <span class="fu">list</span>(<span class="st">&quot;GENDER1&quot;</span>,</span>
-<span id="cb13-15"><a href="exercise-2-alcohol-use.html#cb13-15" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;AGE1&quot;</span>,</span>
-<span id="cb13-16"><a href="exercise-2-alcohol-use.html#cb13-16" aria-hidden="true" tabindex="-1"></a>            <span class="fu">c</span>(<span class="st">&quot;GENDER1&quot;</span>, <span class="st">&quot;AGE1&quot;</span>),</span>
-<span id="cb13-17"><a href="exercise-2-alcohol-use.html#cb13-17" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;GENDER1&quot;</span>,</span>
-<span id="cb13-18"><a href="exercise-2-alcohol-use.html#cb13-18" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;AGE1&quot;</span>,</span>
-<span id="cb13-19"><a href="exercise-2-alcohol-use.html#cb13-19" aria-hidden="true" tabindex="-1"></a>            <span class="fu">c</span>(<span class="st">&quot;GENDER1&quot;</span>, <span class="st">&quot;AGE1&quot;</span>),</span>
-<span id="cb13-20"><a href="exercise-2-alcohol-use.html#cb13-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;GENDER1&quot;</span>,</span>
-<span id="cb13-21"><a href="exercise-2-alcohol-use.html#cb13-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;AGE1&quot;</span>,</span>
-<span id="cb13-22"><a href="exercise-2-alcohol-use.html#cb13-22" aria-hidden="true" tabindex="-1"></a>            <span class="fu">c</span>(<span class="st">&quot;GENDER1&quot;</span>, <span class="st">&quot;AGE1&quot;</span>),</span>
-<span id="cb13-23"><a href="exercise-2-alcohol-use.html#cb13-23" aria-hidden="true" tabindex="-1"></a>            <span class="cn">NULL</span>,</span>
-<span id="cb13-24"><a href="exercise-2-alcohol-use.html#cb13-24" aria-hidden="true" tabindex="-1"></a>            <span class="cn">NULL</span>)</span>
-<span id="cb13-25"><a href="exercise-2-alcohol-use.html#cb13-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Make a list of exploratory models, by modifying a copy of the basic model m0</span></span>
-<span id="cb13-26"><a href="exercise-2-alcohol-use.html#cb13-26" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(mod), <span class="cf">function</span>(i){</span>
-<span id="cb13-27"><a href="exercise-2-alcohol-use.html#cb13-27" aria-hidden="true" tabindex="-1"></a>  m0<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="fu">paste0</span>(m0<span class="sc">$</span>MODEL, mod[i]) <span class="co"># append element i of mod</span></span>
-<span id="cb13-28"><a href="exercise-2-alcohol-use.html#cb13-28" aria-hidden="true" tabindex="-1"></a>  m0<span class="sc">$</span>usevariables <span class="ot">&lt;-</span> <span class="fu">c</span>(m0<span class="sc">$</span>usevariables, vars[[i]]) <span class="co"># append element i of vars</span></span>
-<span id="cb13-29"><a href="exercise-2-alcohol-use.html#cb13-29" aria-hidden="true" tabindex="-1"></a>  m0<span class="sc">$</span>modelout <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&quot;Model&quot;</span>, i, <span class="st">&quot;.inp&quot;</span>) <span class="co"># Add unique filename</span></span>
-<span id="cb13-30"><a href="exercise-2-alcohol-use.html#cb13-30" aria-hidden="true" tabindex="-1"></a>  m0 <span class="co"># return the modified model</span></span>
-<span id="cb13-31"><a href="exercise-2-alcohol-use.html#cb13-31" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb13-32"><a href="exercise-2-alcohol-use.html#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Run all models and store results in a list called results</span></span>
-<span id="cb13-33"><a href="exercise-2-alcohol-use.html#cb13-33" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">lapply</span>(models, mplusModeler, <span class="at">run =</span> 1L)</span>
-<span id="cb13-34"><a href="exercise-2-alcohol-use.html#cb13-34" aria-hidden="true" tabindex="-1"></a><span class="co"># Get summary table and store it in &#39;tab&#39;</span></span>
-<span id="cb13-35"><a href="exercise-2-alcohol-use.html#cb13-35" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">SummaryTable</span>(results, <span class="at">keepCols =</span> <span class="fu">c</span>(<span class="st">&quot;Parameters&quot;</span>, <span class="st">&quot;AIC&quot;</span>, <span class="st">&quot;BIC&quot;</span>, <span class="st">&quot;RMSEA_Estimate&quot;</span>, <span class="st">&quot;CFI&quot;</span>, <span class="st">&quot;TLI&quot;</span>, <span class="st">&quot;SRMR&quot;</span>), <span class="at">sortBy =</span> <span class="cn">NULL</span>)</span>
-<span id="cb13-36"><a href="exercise-2-alcohol-use.html#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="co"># Order by BIC</span></span>
-<span id="cb13-37"><a href="exercise-2-alcohol-use.html#cb13-37" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[<span class="fu">order</span>(tab<span class="sc">$</span>BIC), ]</span>
-<span id="cb13-38"><a href="exercise-2-alcohol-use.html#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Add model syntax to the table</span></span>
-<span id="cb13-39"><a href="exercise-2-alcohol-use.html#cb13-39" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">Model =</span> mod, tab)</span>
-<span id="cb13-40"><a href="exercise-2-alcohol-use.html#cb13-40" aria-hidden="true" tabindex="-1"></a>tab</span></code></pre></div>
-<table class="table" style="margin-left: auto; margin-right: auto;">
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="exercise-2-alcohol-use.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a vector with three &quot;additional syntaxes&quot;</span></span>
+<span id="cb13-2"><a href="exercise-2-alcohol-use.html#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># for my three different models</span></span>
+<span id="cb13-3"><a href="exercise-2-alcohol-use.html#cb13-3" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;i s ON GENDER1;&quot;</span>,</span>
+<span id="cb13-4"><a href="exercise-2-alcohol-use.html#cb13-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;i s ON AGE1;&quot;</span>,</span>
+<span id="cb13-5"><a href="exercise-2-alcohol-use.html#cb13-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;i s ON AGE1 GENDER1;&quot;</span>,</span>
+<span id="cb13-6"><a href="exercise-2-alcohol-use.html#cb13-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;i ON GENDER1;&quot;</span>,</span>
+<span id="cb13-7"><a href="exercise-2-alcohol-use.html#cb13-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;i ON AGE1;&quot;</span>,</span>
+<span id="cb13-8"><a href="exercise-2-alcohol-use.html#cb13-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;i ON AGE1 GENDER1;&quot;</span>,</span>
+<span id="cb13-9"><a href="exercise-2-alcohol-use.html#cb13-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;s ON GENDER1;&quot;</span>,</span>
+<span id="cb13-10"><a href="exercise-2-alcohol-use.html#cb13-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;s ON AGE1;&quot;</span>,</span>
+<span id="cb13-11"><a href="exercise-2-alcohol-use.html#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;s ON AGE1 GENDER1;&quot;</span>,</span>
+<span id="cb13-12"><a href="exercise-2-alcohol-use.html#cb13-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;i WITH s@0;&quot;</span>,</span>
+<span id="cb13-13"><a href="exercise-2-alcohol-use.html#cb13-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">&quot;!baseline&quot;</span>)</span>
+<span id="cb13-14"><a href="exercise-2-alcohol-use.html#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a list with the additional usevariables</span></span>
+<span id="cb13-15"><a href="exercise-2-alcohol-use.html#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co"># used in the three models above</span></span>
+<span id="cb13-16"><a href="exercise-2-alcohol-use.html#cb13-16" aria-hidden="true" tabindex="-1"></a>vars <span class="ot">=</span> <span class="fu">list</span>(<span class="st">&quot;GENDER1&quot;</span>,</span>
+<span id="cb13-17"><a href="exercise-2-alcohol-use.html#cb13-17" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;AGE1&quot;</span>,</span>
+<span id="cb13-18"><a href="exercise-2-alcohol-use.html#cb13-18" aria-hidden="true" tabindex="-1"></a>            <span class="fu">c</span>(<span class="st">&quot;GENDER1&quot;</span>, <span class="st">&quot;AGE1&quot;</span>),</span>
+<span id="cb13-19"><a href="exercise-2-alcohol-use.html#cb13-19" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;GENDER1&quot;</span>,</span>
+<span id="cb13-20"><a href="exercise-2-alcohol-use.html#cb13-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;AGE1&quot;</span>,</span>
+<span id="cb13-21"><a href="exercise-2-alcohol-use.html#cb13-21" aria-hidden="true" tabindex="-1"></a>            <span class="fu">c</span>(<span class="st">&quot;GENDER1&quot;</span>, <span class="st">&quot;AGE1&quot;</span>),</span>
+<span id="cb13-22"><a href="exercise-2-alcohol-use.html#cb13-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;GENDER1&quot;</span>,</span>
+<span id="cb13-23"><a href="exercise-2-alcohol-use.html#cb13-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;AGE1&quot;</span>,</span>
+<span id="cb13-24"><a href="exercise-2-alcohol-use.html#cb13-24" aria-hidden="true" tabindex="-1"></a>            <span class="fu">c</span>(<span class="st">&quot;GENDER1&quot;</span>, <span class="st">&quot;AGE1&quot;</span>),</span>
+<span id="cb13-25"><a href="exercise-2-alcohol-use.html#cb13-25" aria-hidden="true" tabindex="-1"></a>            <span class="cn">NULL</span>,</span>
+<span id="cb13-26"><a href="exercise-2-alcohol-use.html#cb13-26" aria-hidden="true" tabindex="-1"></a>            <span class="cn">NULL</span>)</span>
+<span id="cb13-27"><a href="exercise-2-alcohol-use.html#cb13-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Make a list of exploratory models by modifying m0</span></span>
+<span id="cb13-28"><a href="exercise-2-alcohol-use.html#cb13-28" aria-hidden="true" tabindex="-1"></a>models <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(mod), <span class="cf">function</span>(i){</span>
+<span id="cb13-29"><a href="exercise-2-alcohol-use.html#cb13-29" aria-hidden="true" tabindex="-1"></a>  <span class="co"># append element i of mod</span></span>
+<span id="cb13-30"><a href="exercise-2-alcohol-use.html#cb13-30" aria-hidden="true" tabindex="-1"></a>  m0<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="fu">paste0</span>(m0<span class="sc">$</span>MODEL, mod[i]) </span>
+<span id="cb13-31"><a href="exercise-2-alcohol-use.html#cb13-31" aria-hidden="true" tabindex="-1"></a>  <span class="co"># append element i of vars</span></span>
+<span id="cb13-32"><a href="exercise-2-alcohol-use.html#cb13-32" aria-hidden="true" tabindex="-1"></a>  m0<span class="sc">$</span>usevariables <span class="ot">&lt;-</span> <span class="fu">c</span>(m0<span class="sc">$</span>usevariables, vars[[i]])</span>
+<span id="cb13-33"><a href="exercise-2-alcohol-use.html#cb13-33" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add unique filename</span></span>
+<span id="cb13-34"><a href="exercise-2-alcohol-use.html#cb13-34" aria-hidden="true" tabindex="-1"></a>  m0<span class="sc">$</span>modelout <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">&quot;Model&quot;</span>, i, <span class="st">&quot;.inp&quot;</span>) </span>
+<span id="cb13-35"><a href="exercise-2-alcohol-use.html#cb13-35" aria-hidden="true" tabindex="-1"></a>  <span class="co"># return the modified model</span></span>
+<span id="cb13-36"><a href="exercise-2-alcohol-use.html#cb13-36" aria-hidden="true" tabindex="-1"></a>  m0 </span>
+<span id="cb13-37"><a href="exercise-2-alcohol-use.html#cb13-37" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb13-38"><a href="exercise-2-alcohol-use.html#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Run all models and store results in a list called results</span></span>
+<span id="cb13-39"><a href="exercise-2-alcohol-use.html#cb13-39" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">lapply</span>(models, mplusModeler, <span class="at">run =</span> 1L)</span>
+<span id="cb13-40"><a href="exercise-2-alcohol-use.html#cb13-40" aria-hidden="true" tabindex="-1"></a><span class="co"># Get summary table and store it in &#39;tab&#39;</span></span>
+<span id="cb13-41"><a href="exercise-2-alcohol-use.html#cb13-41" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">SummaryTable</span>(results, </span>
+<span id="cb13-42"><a href="exercise-2-alcohol-use.html#cb13-42" aria-hidden="true" tabindex="-1"></a>                    <span class="at">keepCols =</span> <span class="fu">c</span>(<span class="st">&quot;Parameters&quot;</span>, <span class="st">&quot;AIC&quot;</span>, <span class="st">&quot;BIC&quot;</span>,</span>
+<span id="cb13-43"><a href="exercise-2-alcohol-use.html#cb13-43" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;RMSEA_Estimate&quot;</span>, <span class="st">&quot;CFI&quot;</span>,</span>
+<span id="cb13-44"><a href="exercise-2-alcohol-use.html#cb13-44" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;TLI&quot;</span>, <span class="st">&quot;SRMR&quot;</span>),</span>
+<span id="cb13-45"><a href="exercise-2-alcohol-use.html#cb13-45" aria-hidden="true" tabindex="-1"></a>                    <span class="at">sortBy =</span> <span class="cn">NULL</span>)</span>
+<span id="cb13-46"><a href="exercise-2-alcohol-use.html#cb13-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Order by BIC</span></span>
+<span id="cb13-47"><a href="exercise-2-alcohol-use.html#cb13-47" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[<span class="fu">order</span>(tab<span class="sc">$</span>BIC), ]</span>
+<span id="cb13-48"><a href="exercise-2-alcohol-use.html#cb13-48" aria-hidden="true" tabindex="-1"></a><span class="co"># Add model syntax to the table</span></span>
+<span id="cb13-49"><a href="exercise-2-alcohol-use.html#cb13-49" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="at">Model =</span> mod, tab)</span>
+<span id="cb13-50"><a href="exercise-2-alcohol-use.html#cb13-50" aria-hidden="true" tabindex="-1"></a>tab</span></code></pre></div>
+<table>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -371,10 +382,10 @@ i s ON GENDER1;
 12
 </td>
 <td style="text-align:right;">
-5128.76
+5129
 </td>
 <td style="text-align:right;">
-5178.49
+5178
 </td>
 <td style="text-align:right;">
 0.03
@@ -397,10 +408,10 @@ i s ON AGE1;
 10
 </td>
 <td style="text-align:right;">
-5139.68
+5140
 </td>
 <td style="text-align:right;">
-5181.12
+5181
 </td>
 <td style="text-align:right;">
 0.03
@@ -423,10 +434,10 @@ i s ON AGE1 GENDER1;
 9
 </td>
 <td style="text-align:right;">
-5166.45
+5166
 </td>
 <td style="text-align:right;">
-5203.75
+5204
 </td>
 <td style="text-align:right;">
 0.12
@@ -449,10 +460,10 @@ i ON GENDER1;
 8
 </td>
 <td style="text-align:right;">
-5175.99
+5176
 </td>
 <td style="text-align:right;">
-5209.15
+5209
 </td>
 <td style="text-align:right;">
 0.06
@@ -475,10 +486,10 @@ i ON AGE1;
 10
 </td>
 <td style="text-align:right;">
-5167.92
+5168
 </td>
 <td style="text-align:right;">
-5209.36
+5209
 </td>
 <td style="text-align:right;">
 0.05
@@ -501,10 +512,10 @@ i ON AGE1 GENDER1;
 8
 </td>
 <td style="text-align:right;">
-5178.70
+5179
 </td>
 <td style="text-align:right;">
-5211.86
+5212
 </td>
 <td style="text-align:right;">
 0.15
@@ -527,10 +538,10 @@ s ON GENDER1;
 9
 </td>
 <td style="text-align:right;">
-5199.40
+5199
 </td>
 <td style="text-align:right;">
-5236.70
+5237
 </td>
 <td style="text-align:right;">
 0.16
@@ -553,10 +564,10 @@ s ON AGE1;
 8
 </td>
 <td style="text-align:right;">
-5207.22
+5207
 </td>
 <td style="text-align:right;">
-5240.37
+5240
 </td>
 <td style="text-align:right;">
 0.15
@@ -579,10 +590,10 @@ s ON AGE1 GENDER1;
 8
 </td>
 <td style="text-align:right;">
-5207.51
+5208
 </td>
 <td style="text-align:right;">
-5240.66
+5241
 </td>
 <td style="text-align:right;">
 0.20
@@ -605,10 +616,10 @@ i WITH <a href="mailto:s@0" class="email">s@0</a>;
 8
 </td>
 <td style="text-align:right;">
-5210.58
+5211
 </td>
 <td style="text-align:right;">
-5243.74
+5244
 </td>
 <td style="text-align:right;">
 0.16
@@ -631,10 +642,10 @@ i WITH <a href="mailto:s@0" class="email">s@0</a>;
 7
 </td>
 <td style="text-align:right;">
-5216.84
+5217
 </td>
 <td style="text-align:right;">
-5245.85
+5246
 </td>
 <td style="text-align:right;">
 0.22
@@ -651,10 +662,12 @@ i WITH <a href="mailto:s@0" class="email">s@0</a>;
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="exercise-2-alcohol-use.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the BICs and annotate with the syntax to see which model is best</span></span>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="exercise-2-alcohol-use.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the BICs and annotate with the syntax to see which is best</span></span>
 <span id="cb14-2"><a href="exercise-2-alcohol-use.html#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb14-3"><a href="exercise-2-alcohol-use.html#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>, <span class="at">y =</span> tab<span class="sc">$</span>BIC) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_text</span>(<span class="at">label =</span> tab<span class="sc">$</span>Model, <span class="at">size =</span> <span class="dv">2</span>)</span></code></pre></div>
-<p><img src="S23_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<span id="cb14-3"><a href="exercise-2-alcohol-use.html#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">qplot</span>(<span class="at">x =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>, <span class="at">y =</span> tab<span class="sc">$</span>BIC) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="exercise-2-alcohol-use.html#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb14-5"><a href="exercise-2-alcohol-use.html#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">label =</span> tab<span class="sc">$</span>Model, <span class="at">size =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="S23_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
 <p>It looks like, paradoxically, predicting I and S from either age or gender
 has the best fit. However, note that there is only a small difference between
 the smallest and the largest BIC: diff(range(tab$BIC)).
@@ -681,33 +694,37 @@ option <code>difftest</code>.</p>
 <p>Again, we can start from m0:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="exercise-2-alcohol-use.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify model with only indirect effects</span></span>
 <span id="cb15-2"><a href="exercise-2-alcohol-use.html#cb15-2" aria-hidden="true" tabindex="-1"></a>m2c_indirect <span class="ot">&lt;-</span> m0</span>
-<span id="cb15-3"><a href="exercise-2-alcohol-use.html#cb15-3" aria-hidden="true" tabindex="-1"></a>m2c_indirect<span class="sc">$</span>usevariables <span class="ot">&lt;-</span> <span class="fu">c</span>(m2c_indirect<span class="sc">$</span>usevariables, <span class="st">&quot;AGE1&quot;</span>, <span class="st">&quot;GENDER1&quot;</span>, <span class="st">&quot;ALCPROB5&quot;</span>)</span>
-<span id="cb15-4"><a href="exercise-2-alcohol-use.html#cb15-4" aria-hidden="true" tabindex="-1"></a>m2c_indirect<span class="sc">$</span>VARIABLE <span class="ot">&lt;-</span> <span class="st">&quot;CATEGORICAL = ALCPROB5;&quot;</span></span>
-<span id="cb15-5"><a href="exercise-2-alcohol-use.html#cb15-5" aria-hidden="true" tabindex="-1"></a>m2c_indirect<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="fu">paste0</span>(m0<span class="sc">$</span>MODEL, <span class="st">&quot;i on AGE1 GENDER1;</span></span>
-<span id="cb15-6"><a href="exercise-2-alcohol-use.html#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="st">                                        i WITH s;</span></span>
-<span id="cb15-7"><a href="exercise-2-alcohol-use.html#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="st">                                        ALCPROB5 on i s;</span></span>
-<span id="cb15-8"><a href="exercise-2-alcohol-use.html#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="st">                                        ALCPROB5 on AGE1 GENDER1;&quot;</span>)</span>
-<span id="cb15-9"><a href="exercise-2-alcohol-use.html#cb15-9" aria-hidden="true" tabindex="-1"></a>m2c_indirect<span class="sc">$</span>SAVEDATA <span class="ot">&lt;-</span> <span class="st">&quot;difftest is mediation.dat;&quot;</span></span>
-<span id="cb15-10"><a href="exercise-2-alcohol-use.html#cb15-10" aria-hidden="true" tabindex="-1"></a>m2c_indirect<span class="sc">$</span>modelout <span class="ot">&lt;-</span> <span class="st">&quot;m2c_indirect.inp&quot;</span></span>
-<span id="cb15-11"><a href="exercise-2-alcohol-use.html#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Run all models and store results in a list called results</span></span>
-<span id="cb15-12"><a href="exercise-2-alcohol-use.html#cb15-12" aria-hidden="true" tabindex="-1"></a>result_ind <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(m2c_indirect, <span class="at">run =</span> 1L)</span>
-<span id="cb15-13"><a href="exercise-2-alcohol-use.html#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-14"><a href="exercise-2-alcohol-use.html#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify model with direct effects too</span></span>
-<span id="cb15-15"><a href="exercise-2-alcohol-use.html#cb15-15" aria-hidden="true" tabindex="-1"></a>m2c_direct <span class="ot">&lt;-</span> m2c_indirect</span>
-<span id="cb15-16"><a href="exercise-2-alcohol-use.html#cb15-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Replace direct effects with a constrained effect (constrained to 0)</span></span>
-<span id="cb15-17"><a href="exercise-2-alcohol-use.html#cb15-17" aria-hidden="true" tabindex="-1"></a>m2c_direct<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;ALCPROB5 on AGE1 GENDER1;&quot;</span>,</span>
-<span id="cb15-18"><a href="exercise-2-alcohol-use.html#cb15-18" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;ALCPROB5 on AGE1 GENDER1@0;&quot;</span>,</span>
-<span id="cb15-19"><a href="exercise-2-alcohol-use.html#cb15-19" aria-hidden="true" tabindex="-1"></a>                         m2c_direct<span class="sc">$</span>MODEL,</span>
-<span id="cb15-20"><a href="exercise-2-alcohol-use.html#cb15-20" aria-hidden="true" tabindex="-1"></a>                         <span class="at">fixed =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb15-21"><a href="exercise-2-alcohol-use.html#cb15-21" aria-hidden="true" tabindex="-1"></a>m2c_direct<span class="sc">$</span>ANALYSIS <span class="ot">&lt;-</span> <span class="st">&quot;difftest = mediation.dat;&quot;</span> </span>
-<span id="cb15-22"><a href="exercise-2-alcohol-use.html#cb15-22" aria-hidden="true" tabindex="-1"></a>m2c_direct<span class="sc">$</span>modelout <span class="ot">&lt;-</span> <span class="st">&quot;m2c_direct.inp&quot;</span></span>
-<span id="cb15-23"><a href="exercise-2-alcohol-use.html#cb15-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the direct model, which includes the difference test</span></span>
-<span id="cb15-24"><a href="exercise-2-alcohol-use.html#cb15-24" aria-hidden="true" tabindex="-1"></a>result_dir <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(m2c_direct, <span class="at">run =</span> 1L)</span>
-<span id="cb15-25"><a href="exercise-2-alcohol-use.html#cb15-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Look at the model summaries</span></span>
-<span id="cb15-26"><a href="exercise-2-alcohol-use.html#cb15-26" aria-hidden="true" tabindex="-1"></a><span class="fu">get_summaries</span>(result_dir)</span></code></pre></div>
+<span id="cb15-3"><a href="exercise-2-alcohol-use.html#cb15-3" aria-hidden="true" tabindex="-1"></a>m2c_indirect<span class="sc">$</span>usevariables <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb15-4"><a href="exercise-2-alcohol-use.html#cb15-4" aria-hidden="true" tabindex="-1"></a>  m2c_indirect<span class="sc">$</span>usevariables,</span>
+<span id="cb15-5"><a href="exercise-2-alcohol-use.html#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;AGE1&quot;</span>, <span class="st">&quot;GENDER1&quot;</span>, <span class="st">&quot;ALCPROB5&quot;</span>)</span>
+<span id="cb15-6"><a href="exercise-2-alcohol-use.html#cb15-6" aria-hidden="true" tabindex="-1"></a>m2c_indirect<span class="sc">$</span>VARIABLE <span class="ot">&lt;-</span> <span class="st">&quot;CATEGORICAL = ALCPROB5;&quot;</span></span>
+<span id="cb15-7"><a href="exercise-2-alcohol-use.html#cb15-7" aria-hidden="true" tabindex="-1"></a>m2c_indirect<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
+<span id="cb15-8"><a href="exercise-2-alcohol-use.html#cb15-8" aria-hidden="true" tabindex="-1"></a>  m0<span class="sc">$</span>MODEL,</span>
+<span id="cb15-9"><a href="exercise-2-alcohol-use.html#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;i on AGE1 GENDER1;</span></span>
+<span id="cb15-10"><a href="exercise-2-alcohol-use.html#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="st">  i WITH s;</span></span>
+<span id="cb15-11"><a href="exercise-2-alcohol-use.html#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="st">  ALCPROB5 on i s;</span></span>
+<span id="cb15-12"><a href="exercise-2-alcohol-use.html#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="st">  ALCPROB5 on AGE1 GENDER1;&quot;</span>)</span>
+<span id="cb15-13"><a href="exercise-2-alcohol-use.html#cb15-13" aria-hidden="true" tabindex="-1"></a>m2c_indirect<span class="sc">$</span>SAVEDATA <span class="ot">&lt;-</span> <span class="st">&quot;difftest is mediation.dat;&quot;</span></span>
+<span id="cb15-14"><a href="exercise-2-alcohol-use.html#cb15-14" aria-hidden="true" tabindex="-1"></a>m2c_indirect<span class="sc">$</span>modelout <span class="ot">&lt;-</span> <span class="st">&quot;m2c_indirect.inp&quot;</span></span>
+<span id="cb15-15"><a href="exercise-2-alcohol-use.html#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Run all models and store results in a list called results</span></span>
+<span id="cb15-16"><a href="exercise-2-alcohol-use.html#cb15-16" aria-hidden="true" tabindex="-1"></a>result_ind <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(m2c_indirect, <span class="at">run =</span> 1L)</span>
+<span id="cb15-17"><a href="exercise-2-alcohol-use.html#cb15-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="exercise-2-alcohol-use.html#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify model with direct effects too</span></span>
+<span id="cb15-19"><a href="exercise-2-alcohol-use.html#cb15-19" aria-hidden="true" tabindex="-1"></a>m2c_direct <span class="ot">&lt;-</span> m2c_indirect</span>
+<span id="cb15-20"><a href="exercise-2-alcohol-use.html#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Constrain direct effects to 0 using gsub (replace)</span></span>
+<span id="cb15-21"><a href="exercise-2-alcohol-use.html#cb15-21" aria-hidden="true" tabindex="-1"></a>m2c_direct<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;ALCPROB5 on AGE1 GENDER1;&quot;</span>,</span>
+<span id="cb15-22"><a href="exercise-2-alcohol-use.html#cb15-22" aria-hidden="true" tabindex="-1"></a>                         <span class="st">&quot;ALCPROB5 on AGE1 GENDER1@0;&quot;</span>,</span>
+<span id="cb15-23"><a href="exercise-2-alcohol-use.html#cb15-23" aria-hidden="true" tabindex="-1"></a>                         m2c_direct<span class="sc">$</span>MODEL,</span>
+<span id="cb15-24"><a href="exercise-2-alcohol-use.html#cb15-24" aria-hidden="true" tabindex="-1"></a>                         <span class="at">fixed =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-25"><a href="exercise-2-alcohol-use.html#cb15-25" aria-hidden="true" tabindex="-1"></a>m2c_direct<span class="sc">$</span>ANALYSIS <span class="ot">&lt;-</span> <span class="st">&quot;difftest = mediation.dat;&quot;</span> </span>
+<span id="cb15-26"><a href="exercise-2-alcohol-use.html#cb15-26" aria-hidden="true" tabindex="-1"></a>m2c_direct<span class="sc">$</span>modelout <span class="ot">&lt;-</span> <span class="st">&quot;m2c_direct.inp&quot;</span></span>
+<span id="cb15-27"><a href="exercise-2-alcohol-use.html#cb15-27" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the direct model, which includes the difference test</span></span>
+<span id="cb15-28"><a href="exercise-2-alcohol-use.html#cb15-28" aria-hidden="true" tabindex="-1"></a>result_dir <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(m2c_direct, <span class="at">run =</span> 1L)</span>
+<span id="cb15-29"><a href="exercise-2-alcohol-use.html#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Look at the model summaries</span></span>
+<span id="cb15-30"><a href="exercise-2-alcohol-use.html#cb15-30" aria-hidden="true" tabindex="-1"></a><span class="fu">get_summaries</span>(result_dir)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":["Mplus.version"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Title"],"name":[2],"type":["chr"],"align":["left"]},{"label":["AnalysisType"],"name":[3],"type":["chr"],"align":["left"]},{"label":["DataType"],"name":[4],"type":["chr"],"align":["left"]},{"label":["Estimator"],"name":[5],"type":["chr"],"align":["left"]},{"label":["Observations"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["NGroups"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["NDependentVars"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["NIndependentVars"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["NContinuousLatentVars"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Parameters"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_Value"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_DF"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_PValue"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["ChiSqBaseline_Value"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["ChiSqBaseline_DF"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["ChiSqBaseline_PValue"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["ChiSqDiffTest_Value"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["ChiSqDiffTest_DF"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["ChiSqDiffTest_PValue"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["CFI"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["TLI"],"name":[22],"type":["dbl"],"align":["right"]},{"label":["RMSEA_Estimate"],"name":[23],"type":["dbl"],"align":["right"]},{"label":["RMSEA_90CI_LB"],"name":[24],"type":["dbl"],"align":["right"]},{"label":["RMSEA_90CI_UB"],"name":[25],"type":["dbl"],"align":["right"]},{"label":["RMSEA_pLT05"],"name":[26],"type":["dbl"],"align":["right"]},{"label":["SRMR"],"name":[27],"type":["dbl"],"align":["right"]},{"label":["Filename"],"name":[28],"type":["chr"],"align":["left"]}],"data":[{"1":"8.6","2":"LGA MODEL","3":"GENERAL","4":"INDIVIDUAL","5":"WLSMV","6":"466","7":"1","8":"4","9":"2","10":"2","11":"14","12":"5.132","13":"7","14":"0.6438","15":"215.036","16":"14","17":"0","18":"0.213","19":"1","20":"0.6447","21":"1","22":"1","23":"0","24":"0","25":"0.047","26":"0.963","27":"0.057","28":"m2c_direct.out"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["Mplus.version"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Title"],"name":[2],"type":["chr"],"align":["left"]},{"label":["AnalysisType"],"name":[3],"type":["chr"],"align":["left"]},{"label":["DataType"],"name":[4],"type":["chr"],"align":["left"]},{"label":["Estimator"],"name":[5],"type":["chr"],"align":["left"]},{"label":["Observations"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["NGroups"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["NDependentVars"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["NIndependentVars"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["NContinuousLatentVars"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Parameters"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_Value"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_DF"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_PValue"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["ChiSqBaseline_Value"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["ChiSqBaseline_DF"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["ChiSqBaseline_PValue"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["ChiSqDiffTest_Value"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["ChiSqDiffTest_DF"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["ChiSqDiffTest_PValue"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["CFI"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["TLI"],"name":[22],"type":["dbl"],"align":["right"]},{"label":["RMSEA_Estimate"],"name":[23],"type":["dbl"],"align":["right"]},{"label":["RMSEA_90CI_LB"],"name":[24],"type":["dbl"],"align":["right"]},{"label":["RMSEA_90CI_UB"],"name":[25],"type":["dbl"],"align":["right"]},{"label":["RMSEA_pLT05"],"name":[26],"type":["dbl"],"align":["right"]},{"label":["SRMR"],"name":[27],"type":["dbl"],"align":["right"]},{"label":["Filename"],"name":[28],"type":["chr"],"align":["left"]}],"data":[{"1":"8.6","2":"LGA MODEL","3":"GENERAL","4":"INDIVIDUAL","5":"WLSMV","6":"466","7":"1","8":"4","9":"2","10":"2","11":"14","12":"5.1","13":"7","14":"0.64","15":"215","16":"14","17":"0","18":"0.21","19":"1","20":"0.64","21":"1","22":"1","23":"0","24":"0","25":"0.047","26":"0.96","27":"0.057","28":"m2c_direct.out"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 <p>Note that the ChiSqDiffTest_PValue is non-significant, which means we can
@@ -717,7 +734,7 @@ prefer the simpler (no direct effects) model. There is full mediation.</p>
 <span id="cb16-2"><a href="exercise-2-alcohol-use.html#cb16-2" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;&quot;</span>,        <span class="st">&quot;I&quot;</span>,  <span class="st">&quot;ALCPROB5&quot;</span>,</span>
 <span id="cb16-3"><a href="exercise-2-alcohol-use.html#cb16-3" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;GENDER1&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="at">rows =</span> <span class="dv">3</span>)</span>
 <span id="cb16-4"><a href="exercise-2-alcohol-use.html#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">graph_sem</span>(result_ind, <span class="at">layout =</span> lo)</span></code></pre></div>
-<p><img src="S23_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p><img src="S23_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
 </div>
 </div>
             </section>

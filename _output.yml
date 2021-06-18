@@ -5,3 +5,5 @@ bookdown::gitbook:
       before: |
         <li><a href="./index.html">Home</a></li>
     download: ["pdf"]
+bookdown::pdf_book:
+  keep_tex: yes

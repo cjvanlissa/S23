@@ -256,7 +256,7 @@ Interpret the factor loadings and estimate for S.</p>
 <span id="cb18-13"><a href="exercise-3-level-and-shape-parameterization.html#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co"># for all parameters involving S (lhs == &quot;S&quot;)</span></span>
 <span id="cb18-14"><a href="exercise-3-level-and-shape-parameterization.html#cb18-14" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[tab<span class="sc">$</span>lhs <span class="sc">==</span> <span class="st">&quot;S&quot;</span> <span class="sc">&amp;</span> tab<span class="sc">$</span>op <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;=~&quot;</span>, <span class="st">&quot;~1&quot;</span>), ]</span>
 <span id="cb18-15"><a href="exercise-3-level-and-shape-parameterization.html#cb18-15" aria-hidden="true" tabindex="-1"></a>tab[, <span class="fu">c</span>(<span class="st">&quot;label&quot;</span>, <span class="st">&quot;est_sig&quot;</span>, <span class="st">&quot;pval&quot;</span>, <span class="st">&quot;confint&quot;</span>)]</span></code></pre></div>
-<table class="table" style="margin-left: auto; margin-right: auto;">
+<table>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -395,7 +395,7 @@ Interpret the factor loadings and estimate for S.</p>
 <span id="cb19-9"><a href="exercise-3-level-and-shape-parameterization.html#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># for all parameters involving S (lhs == &quot;S&quot;)</span></span>
 <span id="cb19-10"><a href="exercise-3-level-and-shape-parameterization.html#cb19-10" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[tab<span class="sc">$</span>lhs <span class="sc">==</span> <span class="st">&quot;S&quot;</span> <span class="sc">&amp;</span> tab<span class="sc">$</span>op <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;=~&quot;</span>, <span class="st">&quot;~1&quot;</span>), ]</span>
 <span id="cb19-11"><a href="exercise-3-level-and-shape-parameterization.html#cb19-11" aria-hidden="true" tabindex="-1"></a>tab[, <span class="fu">c</span>(<span class="st">&quot;label&quot;</span>, <span class="st">&quot;est_sig&quot;</span>, <span class="st">&quot;pval&quot;</span>, <span class="st">&quot;confint&quot;</span>)]</span></code></pre></div>
-<table class="table" style="margin-left: auto; margin-right: auto;">
+<table>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -552,7 +552,7 @@ estimated points is based on the factor loadings.</p>
 <span id="cb21-9"><a href="exercise-3-level-and-shape-parameterization.html#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only regressions on I and S</span></span>
 <span id="cb21-10"><a href="exercise-3-level-and-shape-parameterization.html#cb21-10" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[tab<span class="sc">$</span>lhs <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;I&quot;</span>, <span class="st">&quot;S&quot;</span>) <span class="sc">&amp;</span> tab<span class="sc">$</span>op <span class="sc">==</span> <span class="st">&quot;~&quot;</span>, ]</span>
 <span id="cb21-11"><a href="exercise-3-level-and-shape-parameterization.html#cb21-11" aria-hidden="true" tabindex="-1"></a>tab[, <span class="fu">c</span>(<span class="st">&quot;label&quot;</span>, <span class="st">&quot;est_sig&quot;</span>, <span class="st">&quot;pval&quot;</span>, <span class="st">&quot;confint&quot;</span>)]</span></code></pre></div>
-<table class="table" style="margin-left: auto; margin-right: auto;">
+<table>
 <thead>
 <tr>
 <th style="text-align:left;">

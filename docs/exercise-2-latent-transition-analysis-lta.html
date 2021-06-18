@@ -241,20 +241,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb36-6"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="at">filename_stem =</span> <span class="st">&quot;2a&quot;</span>,</span>
 <span id="cb36-7"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify the autoregressive effect</span></span>
 <span id="cb36-8"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="at">model_overall =</span> <span class="st">&quot;c2 ON c1;&quot;</span>,</span>
-<span id="cb36-9"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify two class-specific models; one for each categorical latent variable</span></span>
-<span id="cb36-10"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="at">model_class_specific =</span> <span class="fu">c</span>(</span>
-<span id="cb36-11"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;[u11$1] (a{C});  [u12$1] (b{C});  [u13$1] (c{C});  [u14$1] (d{C});  [u15$1] (e{C});&quot;</span>,</span>
-<span id="cb36-12"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;[u21$1] (a{C});  [u22$1] (b{C});  [u23$1] (c{C});  [u24$1] (d{C});  [u25$1] (e{C});&quot;</span></span>
-<span id="cb36-13"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-13" aria-hidden="true" tabindex="-1"></a>),</span>
-<span id="cb36-14"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="at">rdata =</span> data,</span>
-<span id="cb36-15"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="at">usevariables =</span> <span class="fu">names</span>(data)[<span class="sc">-</span><span class="dv">11</span>],</span>
-<span id="cb36-16"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Speed up analysis by using 2 processors; increase random starts</span></span>
-<span id="cb36-17"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Use probability parametrerization</span></span>
-<span id="cb36-18"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="at">ANALYSIS =</span> <span class="st">&quot;PROCESSORS IS 2;  LRTSTARTS (0 0 40 20);  PARAMETERIZATION = PROBABILITY;&quot;</span>,</span>
-<span id="cb36-19"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify that the items are categorical (binary)</span></span>
-<span id="cb36-20"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-20" aria-hidden="true" tabindex="-1"></a><span class="at">VARIABLE =</span> <span class="st">&quot;CATEGORICAL = u11-u15 u21-u25;&quot;</span>,</span>
-<span id="cb36-21"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-21" aria-hidden="true" tabindex="-1"></a><span class="at">run =</span> 1L</span>
-<span id="cb36-22"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-22" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<span id="cb36-9"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify two class-specific models;</span></span>
+<span id="cb36-10"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="co"># one for each categorical latent variable</span></span>
+<span id="cb36-11"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="at">model_class_specific =</span> <span class="fu">c</span>(</span>
+<span id="cb36-12"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;[u11$1] (a{C});  [u12$1] (b{C});  [u13$1] (c{C});</span></span>
+<span id="cb36-13"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-13" aria-hidden="true" tabindex="-1"></a><span class="st"> [u14$1] (d{C});  [u15$1] (e{C});&quot;</span>,</span>
+<span id="cb36-14"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;[u21$1] (a{C});  [u22$1] (b{C});  [u23$1] (c{C});</span></span>
+<span id="cb36-15"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="st"> [u24$1] (d{C});  [u25$1] (e{C});&quot;</span></span>
+<span id="cb36-16"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-16" aria-hidden="true" tabindex="-1"></a>),</span>
+<span id="cb36-17"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="at">rdata =</span> data,</span>
+<span id="cb36-18"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="at">usevariables =</span> <span class="fu">names</span>(data)[<span class="sc">-</span><span class="dv">11</span>],</span>
+<span id="cb36-19"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Speed up analysis by using 2 processors; increase random starts</span></span>
+<span id="cb36-20"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Use probability parametrerization</span></span>
+<span id="cb36-21"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-21" aria-hidden="true" tabindex="-1"></a><span class="at">ANALYSIS =</span> <span class="st">&quot;PROCESSORS IS 2;  LRTSTARTS (0 0 40 20);</span></span>
+<span id="cb36-22"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-22" aria-hidden="true" tabindex="-1"></a><span class="st">            PARAMETERIZATION = PROBABILITY;&quot;</span>,</span>
+<span id="cb36-23"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Specify that the items are categorical (binary)</span></span>
+<span id="cb36-24"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-24" aria-hidden="true" tabindex="-1"></a><span class="at">VARIABLE =</span> <span class="st">&quot;CATEGORICAL = u11-u15 u21-u25;&quot;</span>,</span>
+<span id="cb36-25"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-25" aria-hidden="true" tabindex="-1"></a><span class="at">run =</span> 1L</span>
+<span id="cb36-26"><a href="exercise-2-latent-transition-analysis-lta.html#cb36-26" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>After running the analysis, inspect the proportions of yes/no answers for each of the indicators in the latent classes (look at probability scale in Mplus output).</p>
 <details>
 <summary>
@@ -263,7 +267,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>You can easily extract the parameters in probability scale from the output, using the $ sign. They will be printed to the console as a table.</p>
 <p>Here, we examine just the first few rows of the table:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="exercise-2-latent-transition-analysis-lta.html#cb37-1" aria-hidden="true" tabindex="-1"></a>results_2a<span class="sc">$</span>results<span class="sc">$</span>parameters<span class="sc">$</span>probability.scale</span></code></pre></div>
-<table class="table" style="margin-left: auto; margin-right: auto;">
+<table>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -304,7 +308,7 @@ U11
 0.02
 </td>
 <td style="text-align:right;">
-17.86
+18
 </td>
 <td style="text-align:right;">
 0
@@ -327,7 +331,7 @@ U11
 0.02
 </td>
 <td style="text-align:right;">
-23.33
+23
 </td>
 <td style="text-align:right;">
 0
@@ -350,7 +354,7 @@ U12
 0.03
 </td>
 <td style="text-align:right;">
-16.28
+16
 </td>
 <td style="text-align:right;">
 0
@@ -373,7 +377,7 @@ U12
 0.03
 </td>
 <td style="text-align:right;">
-21.72
+22
 </td>
 <td style="text-align:right;">
 0
@@ -396,7 +400,7 @@ U13
 0.02
 </td>
 <td style="text-align:right;">
-11.76
+12
 </td>
 <td style="text-align:right;">
 0
@@ -419,7 +423,7 @@ U13
 0.02
 </td>
 <td style="text-align:right;">
-34.98
+35
 </td>
 <td style="text-align:right;">
 0
@@ -441,7 +445,7 @@ C1#1
 <p>Again, you can extract this information from the output, using the $ sign. They will be printed to the console as a table.</p>
 <p>Your results should look like this:</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="exercise-2-latent-transition-analysis-lta.html#cb38-1" aria-hidden="true" tabindex="-1"></a>results_2a<span class="sc">$</span>results<span class="sc">$</span>class_counts<span class="sc">$</span>modelEstimated</span></code></pre></div>
-<table class="table" style="margin-left: auto; margin-right: auto;">
+<table>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -467,7 +471,7 @@ C1
 1
 </td>
 <td style="text-align:right;">
-554.37
+554
 </td>
 <td style="text-align:right;">
 0.55
@@ -481,7 +485,7 @@ C1
 2
 </td>
 <td style="text-align:right;">
-445.63
+446
 </td>
 <td style="text-align:right;">
 0.45
@@ -495,7 +499,7 @@ C2
 1
 </td>
 <td style="text-align:right;">
-667.33
+667
 </td>
 <td style="text-align:right;">
 0.67
@@ -509,7 +513,7 @@ C2
 2
 </td>
 <td style="text-align:right;">
-332.67
+333
 </td>
 <td style="text-align:right;">
 0.33
@@ -519,7 +523,7 @@ C2
 </table>
 <p>These probabilites represent the proportion of the total sample that is assigned to each class. Note that an individual can have a non-zero probability of being assigned to both classes. E.g., there might be a 70% probability that the person belongs to class 1, and a 30% probability that the person belongs to class 2. The proportions here are a sum across those probabilities for all participants. Thus, this person would contribute for 30% to the proportion of the sample in class 2.</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="exercise-2-latent-transition-analysis-lta.html#cb39-1" aria-hidden="true" tabindex="-1"></a>results_2a<span class="sc">$</span>results<span class="sc">$</span>class_counts<span class="sc">$</span>transitionProbs</span></code></pre></div>
-<table class="table" style="margin-left: auto; margin-right: auto;">
+<table>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -659,7 +663,7 @@ C2.2
 <span id="cb42-3"><a href="exercise-2-latent-transition-analysis-lta.html#cb42-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">run =</span> 1L)</span></code></pre></div>
 <p>Look in the output for the information about the response probabilities for the various latent classes. Also, look for the transition table. Which classes are the movers and which are the stayers?</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="exercise-2-latent-transition-analysis-lta.html#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_class_counts</span>(result)</span></code></pre></div>
-<table class="table" style="margin-left: auto; margin-right: auto;">
+<table>
 <thead>
 <tr>
 <th style="text-align:left;">
@@ -685,7 +689,7 @@ MOVE
 1
 </td>
 <td style="text-align:right;">
-588.20
+588
 </td>
 <td style="text-align:right;">
 0.59
@@ -699,7 +703,7 @@ MOVE
 2
 </td>
 <td style="text-align:right;">
-411.80
+412
 </td>
 <td style="text-align:right;">
 0.41
@@ -713,7 +717,7 @@ C1
 1
 </td>
 <td style="text-align:right;">
-554.35
+554
 </td>
 <td style="text-align:right;">
 0.55
@@ -727,7 +731,7 @@ C1
 2
 </td>
 <td style="text-align:right;">
-445.65
+446
 </td>
 <td style="text-align:right;">
 0.45
@@ -741,7 +745,7 @@ C2
 1
 </td>
 <td style="text-align:right;">
-667.33
+667
 </td>
 <td style="text-align:right;">
 0.67
@@ -755,7 +759,7 @@ C2
 2
 </td>
 <td style="text-align:right;">
-332.67
+333
 </td>
 <td style="text-align:right;">
 0.33

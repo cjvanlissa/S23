@@ -6,6 +6,7 @@ library(kableExtra)
 library(MplusAutomation)
 library(tidySEM)
 library(dplyr)
+options(digits = 2)
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, results = "hide", eval = TRUE, echo = TRUE, include = TRUE)
 # f <- list.files(pattern = "(inp|out|log|dat|gh5)$")
 # f <- f[!f %in% c("DatingSex.dat", "DDS8_1.dat", "PTSD.dat")]
@@ -67,7 +68,8 @@ First, load the file `DDS8_1.dat` into the R environment. For convenience's sake
 
 ```{r read_data, echo = TRUE, eval = TRUE}
 data <- read.table("DDS8_1.dat", na.strings = -99)
-names(data) <- c("ALC1YR1", "ALC1YR2", "ALC1YR3", "ALCPROB5", "AGE1", "GENDER1")
+names(data) <- c("ALC1YR1", "ALC1YR2", "ALC1YR3",
+                 "ALCPROB5", "AGE1", "GENDER1")
 ```
 
 Use the function `createMixtures` to define the latent class growth model as displayed in Figure 1. To see how the function `createMixtures()` works, type its name, select it, and press F1.
@@ -87,16 +89,18 @@ Make sure to store the resulting output in an object, the same way you stored th
 The resulting syntax should look like this:
 
 ```{r}
-results_1a <- createMixtures(classes = 1:6, filename_stem = "1a",
-                        model_overall = "i s | ALC1YR1@0 ALC1YR2@1 ALC1YR3@2;
-                                         i@0;  s@0;",
-                        rdata = data, 
-                        usevariables = c("ALC1YR1", "ALC1YR2", "ALC1YR3"),
-                        OUTPUT = "tech8 tech11 tech14;",
-                        run = 1L)
+results_1a <- createMixtures(
+  classes = 1:6,
+  filename_stem = "1a",
+  model_overall = "i s | ALC1YR1@0 ALC1YR2@1 ALC1YR3@2;
+                   i@0;  s@0;",
+  rdata = data, 
+  usevariables = c("ALC1YR1", "ALC1YR2", "ALC1YR3"),
+  OUTPUT = "tech8 tech11 tech14;",
+  run = 1L)
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 The function `createModels()` can run all of the analyses in batch, thus taking a lot of work out of your hands.
 The function essentially performs three steps:
@@ -120,10 +124,10 @@ The resulting syntax should look like this:
 mixtureSummaryTable(results_1a)
 ```
 ```{r, echo = FALSE, eval = TRUE, results = "asis"}
-kbl(mixtureSummaryTable(results_1a), full_width = F)
+kbl(mixtureSummaryTable(results_1a))
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 #### Visualization
 
@@ -159,17 +163,19 @@ The STARTS option is used to specify the number of initial random starting value
 The resulting syntax should look like this:
 
 ```{r 1bcreate_models, eval = TRUE, warning=FALSE, message=FALSE, results='hide'}
-results_1b <- createMixtures(classes = 1:6, filename_stem = "1b",
-                             model_overall = "i s | ALC1YR1@0 ALC1YR2@1 ALC1YR3@2;
-                                              i@0;  s@0;",
-                             ANALYSIS = "STARTS = 50 10;",
-                             rdata = data, 
-                             usevariables = c("ALC1YR1", "ALC1YR2", "ALC1YR3"),
-                             OUTPUT = "tech8 tech11 tech14;",
-                             run = 1L)
+results_1b <- 
+  createMixtures(classes = 1:6,
+                 filename_stem = "1b",
+                 model_overall = "i s | ALC1YR1@0 ALC1YR2@1 ALC1YR3@2;
+                                  i@0;  s@0;",
+                 ANALYSIS = "STARTS = 50 10;",
+                 rdata = data, 
+                 usevariables = c("ALC1YR1", "ALC1YR2", "ALC1YR3"),
+                 OUTPUT = "tech8 tech11 tech14;",
+                 run = 1L)
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 Make a mixture summary table to compare the fit information of the models with 1-6 classes, with the increased number of starts, using `mixtureSummaryTable()`. Also open the output files, and inspect the estimates in each class. Which model do you prefer, and why?
 
@@ -181,13 +187,13 @@ The resulting syntax should look like this:
 mixtureSummaryTable(results_1b)
 ```
 ```{r 1a_make_table_hidden2, echo = FALSE, results = "asis", eval = TRUE}
-kable_styling(knitr::kable(mixtureSummaryTable(results_1b), digits = 2, format = "html"))
+kbl(mixtureSummaryTable(results_1b))
 ```
 
 Based on the table, I would select a 3-class model. The fit indices and (V)LMR tests essentially indicate that you can keep adding classes and improve the model, which makes it difficult to decide. However, if we look at min_N, we see that from 4 classes onward, the smallest class has less than 10% of cases assigned to it. The minimum posterior classification probability and entropy are best for the 3-class model, which means that this model can reasonably accurately assign individuals to classes.
 
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ### 1c. Latent Growth Mixture Models.
 
@@ -199,17 +205,20 @@ Set up the same models as analyzed in the previous exercise, but now allow the m
 The resulting syntax should look like this:
 
 ```{r}
-results_1c <- createMixtures(classes = 1:4, filename_stem = "1c", 
-                             model_overall = "i s | ALC1YR1@0 ALC1YR2@1 ALC1YR3@2;
-                                              i@0;  s@0;",
-                             model_class_specific = "i;  s;",
-                             rdata = data, OUTPUT = "tech8 tech11 tech14;",
-                             usevariables = c("ALC1YR1", "ALC1YR2", "ALC1YR3"),
-                             ANALYSIS = "PROCESSORS = 4;",
-                             run = 1L)
+results_1c <-
+  createMixtures(classes = 1:4,
+                 filename_stem = "1c", 
+                 model_overall = "i s | ALC1YR1@0 ALC1YR2@1 ALC1YR3@2;
+                                  i@0;  s@0;",
+                 model_class_specific = "i;  s;",
+                 rdata = data,
+                 OUTPUT = "tech8 tech11 tech14;",
+                 usevariables = c("ALC1YR1", "ALC1YR2", "ALC1YR3"),
+                 ANALYSIS = "PROCESSORS = 4;",
+                 run = 1L)
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ### 1d. Visualizing growth models.
 
@@ -274,16 +283,19 @@ I'm providing an example using the BCH 3-step procedure below. It can be seen, f
 The resulting syntax and output should look like this:
 
 ```{r}
-results_1e <- createMixtures(classes = 3, filename_stem = "1e", 
-                             model_overall = "i s | ALC1YR1@0 ALC1YR2@1 ALC1YR3@2;
-                                              i@0;  s@0;",
-                             model_class_specific = "i;  s;",
-                             rdata = data, OUTPUT = "tech8 tech11 tech14;",
-                             usevariables = c("ALC1YR1", "ALC1YR2", "ALC1YR3",
-                                              "AGE1", "GENDER1"),
-                             VARIABLE = "Auxiliary = AGE1(BCH)  GENDER1(BCH);",
-                             ANALYSIS = "PROCESSORS = 4;",
-                             run = 1L)
+results_1e <-
+  createMixtures(classes = 3,
+                 filename_stem = "1e", 
+                 model_overall = "i s | ALC1YR1@0 ALC1YR2@1 ALC1YR3@2;
+                                  i@0;  s@0;",
+                 model_class_specific = "i;  s;",
+                 rdata = data,
+                 OUTPUT = "tech8 tech11 tech14;",
+                 usevariables = c("ALC1YR1", "ALC1YR2", "ALC1YR3",
+                                  "AGE1", "GENDER1"),
+                 VARIABLE = "Auxiliary = AGE1(BCH)  GENDER1(BCH);",
+                 ANALYSIS = "PROCESSORS = 4;",
+                 run = 1L)
 
 # The results of the conditional means test are inside the output object
 # But you have to dig a little bit. The code to get them is:
@@ -293,7 +305,7 @@ get_lcCondMeans(results_1e)
 get_lcCondMeans(results_1e)
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ## Exercise 2: Latent Transition Analysis (LTA)
 
@@ -308,16 +320,20 @@ if(!file.exists("2a_2_class.out")){
   filename_stem = "2a",
   # Specify the autoregressive effect
   model_overall = "c2 ON c1;",
-  # Specify two class-specific models; one for each categorical latent variable
+  # Specify two class-specific models;
+  # one for each categorical latent variable
   model_class_specific = c(
-  "[u11$1] (a{C});  [u12$1] (b{C});  [u13$1] (c{C});  [u14$1] (d{C});  [u15$1] (e{C});",
-  "[u21$1] (a{C});  [u22$1] (b{C});  [u23$1] (c{C});  [u24$1] (d{C});  [u25$1] (e{C});"
+  "[u11$1] (a{C});  [u12$1] (b{C});  [u13$1] (c{C});
+   [u14$1] (d{C});  [u15$1] (e{C});",
+  "[u21$1] (a{C});  [u22$1] (b{C});  [u23$1] (c{C});
+   [u24$1] (d{C});  [u25$1] (e{C});"
   ),
   rdata = data,
   usevariables = names(data)[-11],
   # Speed up analysis by using 2 processors; increase random starts
   # Use probability parametrerization
-  ANALYSIS = "PROCESSORS IS 2;  LRTSTARTS (0 0 40 20);  PARAMETERIZATION = PROBABILITY;",
+  ANALYSIS = "PROCESSORS IS 2;  LRTSTARTS (0 0 40 20);
+              PARAMETERIZATION = PROBABILITY;",
   # Specify that the items are categorical (binary)
   VARIABLE = "CATEGORICAL = u11-u15 u21-u25;"
   )
@@ -350,16 +366,20 @@ classes = 2,
 filename_stem = "2a",
 # Specify the autoregressive effect
 model_overall = "c2 ON c1;",
-# Specify two class-specific models; one for each categorical latent variable
+# Specify two class-specific models;
+# one for each categorical latent variable
 model_class_specific = c(
-"[u11$1] (a{C});  [u12$1] (b{C});  [u13$1] (c{C});  [u14$1] (d{C});  [u15$1] (e{C});",
-"[u21$1] (a{C});  [u22$1] (b{C});  [u23$1] (c{C});  [u24$1] (d{C});  [u25$1] (e{C});"
+"[u11$1] (a{C});  [u12$1] (b{C});  [u13$1] (c{C});
+ [u14$1] (d{C});  [u15$1] (e{C});",
+"[u21$1] (a{C});  [u22$1] (b{C});  [u23$1] (c{C});
+ [u24$1] (d{C});  [u25$1] (e{C});"
 ),
 rdata = data,
 usevariables = names(data)[-11],
 # Speed up analysis by using 2 processors; increase random starts
 # Use probability parametrerization
-ANALYSIS = "PROCESSORS IS 2;  LRTSTARTS (0 0 40 20);  PARAMETERIZATION = PROBABILITY;",
+ANALYSIS = "PROCESSORS IS 2;  LRTSTARTS (0 0 40 20);
+            PARAMETERIZATION = PROBABILITY;",
 # Specify that the items are categorical (binary)
 VARIABLE = "CATEGORICAL = u11-u15 u21-u25;",
 run = 1L
@@ -380,10 +400,10 @@ results_2a$results$parameters$probability.scale
 ```
 
 ```{r 2aprobscale_hidden, echo = FALSE, results = "asis", eval = TRUE}
-kable_styling(knitr::kable(head(results_2a$results$parameters$probability.scale), digits = 2, format = "html"))
+kbl(head(results_2a$results$parameters$probability.scale))
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ### 2b. Class proportions and transition probabilities
 
@@ -402,7 +422,7 @@ results_2a$results$class_counts$modelEstimated
 ```
 
 ```{r 2amodest_hidden, echo = FALSE, results = "asis", eval = TRUE}
-kable_styling(knitr::kable(results_2a$results$class_counts$modelEstimated, digits = 2, format = "html"))
+kbl(results_2a$results$class_counts$modelEstimated)
 ```
 
 These probabilites represent the proportion of the total sample that is assigned to each class. Note that an individual can have a non-zero probability of being assigned to both classes. E.g., there might be a 70% probability that the person belongs to class 1, and a 30% probability that the person belongs to class 2. The proportions here are a sum across those probabilities for all participants. Thus, this person would contribute for 30% to the proportion of the sample in class 2.
@@ -412,12 +432,12 @@ results_2a$results$class_counts$transitionProbs
 ```
 
 ```{r 2atransprob_hidden, echo = FALSE, results = "asis", eval = TRUE}
-kable_styling(knitr::kable(results_2a$results$class_counts$transitionProbs, digits = 2, format = "html"))
+kbl(results_2a$results$class_counts$transitionProbs)
 ```
 
 These probabilites represent the probability that an individual assigned to one class at time one, will be assigned to another class at time 2. So for example, we see that people in class 1 at time 1 also tend to be in class 1 at time 2 (.76 probability).
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 These probabilities can be visualized as a nodes-and-edges plot, using `plotLTA()`. How are the numeric results from the output reflected in the graph generated by this function?
 
@@ -430,7 +450,7 @@ The probabilities are mapped to the line width of the circles and lines in the p
 plotLTA(results_2a)
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ### 2c. Adding control variables (optional)
 
@@ -452,7 +472,7 @@ And add this line:
 
 `c1 c2 ON gender;`
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ### 2d. Extend the model to a mover-stayer model (optional)
 
@@ -522,7 +542,7 @@ get_class_counts(result)
 ```
 
 ```{r, echo = FALSE, results = "asis", eval=TRUE, message=FALSE}
-kable_styling(knitr::kable(result$results$class_counts$modelEstimated, digits = 2, format = "html"))
+kbl(result$results$class_counts$modelEstimated)
 ```
 
 

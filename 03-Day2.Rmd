@@ -7,6 +7,7 @@ library(MplusAutomation)
 library(tidySEM)
 show_answers <- TRUE
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, results = "hide", eval = show_answers, echo = show_answers)
+options(digits = 2)
 # f <- list.files(pattern = "(inp|out|log|dat|gh5)$")
 # f <- f[!f %in% c("DatingSex.dat", "DDS8_1.dat", "PTSD.dat")]
 # file.remove(f)
@@ -45,7 +46,8 @@ basic <- mplusObject(
   PLOT = "SERIES = w1-w8 (s);
           TYPE = PLOT3;",
   rdata = data,
-  usevariables = c("W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8")
+  usevariables =
+    c("W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8")
 )
 ```
 
@@ -88,21 +90,30 @@ Here is an example of how to approach the problem:
 ```{r}
 # First, create a linear model from the basic one
 linear <- basic
-linear$MODEL <- "i s | W1@0.5 W2@1 W3@2 W4@4 W5@6 W6@9 W7@12 W8@18;"
-result_linear <- mplusModeler(linear, modelout = "linear.inp", run = 1L)
+linear$MODEL <-
+  "i s | W1@0.5 W2@1 W3@2 W4@4 W5@6 W6@9 W7@12 W8@18;"
+result_linear <- 
+  mplusModeler(linear, modelout = "linear.inp", run = 1L)
 # Then, a quadratic one
 quad <- basic
-quad$MODEL <- "i s q | W1@0.5 W2@1 W3@2 W4@4 W5@6 W6@9 W7@12 W8@18;"
-result_quad <- mplusModeler(quad, modelout = "quad.inp", run = 1L)
+quad$MODEL <-
+  "i s q | W1@0.5 W2@1 W3@2 W4@4 W5@6 W6@9 W7@12 W8@18;"
+result_quad <-
+  mplusModeler(quad, modelout = "quad.inp", run = 1L)
 # Then, a quadratic one with fixed variance
 quad0 <- basic
-quad0$MODEL <- "i s q | W1@0.5 W2@1 W3@2 W4@4 W5@6 W6@9 W7@12 W8@18;
-               q@0;"
-result_quad0 <- mplusModeler(quad0, modelout = "quad0.inp", run = 1L)
+quad0$MODEL <-
+  "i s q | W1@0.5 W2@1 W3@2 W4@4 W5@6 W6@9 W7@12 W8@18;
+   q@0;"
+result_quad0 <-
+  mplusModeler(quad0, modelout = "quad0.inp", run = 1L)
 # Combine them both in a list:
 results <- list(result_linear, result_quad, result_quad0)
 # Compare the fit:
-SummaryTable(results, keepCols = c("Filename", "Parameters", "AIC", "BIC", "RMSEA_Estimate", "CFI", "TLI", "SRMR"))
+SummaryTable(results,
+             keepCols = c("Filename", "Parameters",
+                          "AIC", "BIC", "RMSEA_Estimate",
+                          "CFI", "TLI", "SRMR"))
 ``` 
 
 ```{r, results = "asis", echo = FALSE}
@@ -123,10 +134,10 @@ result_quad0 <- mplusModeler(quad0, modelout = "quad0.inp", run = 1L)
 # Combine them both in a list:
 results <- list(result_linear, result_quad, result_quad0)
 })
-kable_styling(knitr::kable(SummaryTable(results, keepCols = c("Filename", "Parameters", "AIC", "BIC", "RMSEA_Estimate", "CFI", "TLI", "SRMR")), digits = 2, format = "html"), latex_options = c("striped", "scale_down"))
+kbl(SummaryTable(results, keepCols = c("Filename", "Parameters", "AIC", "BIC", "RMSEA_Estimate", "CFI", "TLI", "SRMR")), digits = 2)
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ### Exercise 1b: Add covariates
 
@@ -157,14 +168,17 @@ covs$MODEL <- c(covs$MODEL,
                 pain on i (f3);
                 pain on s (f4);")
 # Add new usevariables:
-covs$usevariables <- c(covs$usevariables, "tvlo", "gender", "pain")
+covs$usevariables <- c(covs$usevariables,
+                       "tvlo", "gender", "pain")
 covs$rdata
 # Add grouping variable:
 covs$VARIABLE <- "GROUPING IS gender (1 = male 2 = female);"
 # Add parameter tests
 covs$MODELTEST <- "m3 = f3; m4 = f4;"
                 
-result_covs <- mplusModeler(covs, modelout = "covs.inp", run = 1L)
+result_covs <- mplusModeler(covs,
+                            modelout = "covs.inp",
+                            run = 1L)
 # Obtain the model summaries; you need the Wald test for
 # the parameter difference tests.
 get_summaries(result_covs)
@@ -216,7 +230,7 @@ result_covs <- mplusModeler(covs, modelout = "covs.inp", run = 1L)
 get_summaries(result_covs)
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 #### Visualization
 
@@ -255,8 +269,11 @@ tab <- tab[tab$op == "~", ]
 # Remove group name from the label
 tab$label <- gsub("\\.(FE)?MALE", "", tab$label)
 # Make a wide table with both groups next to each other
-tab <- reshape(tab, timevar = "group", idvar = "label", direction = "wide")
-# Retain only columns with the standardized estimate, pvalue, and 95% CI
+tab <- reshape(tab,
+               timevar = "group",
+               idvar = "label",
+               direction = "wide")
+# Retain only the standardized estimate, pvalue, and 95% CI
 tab[, c(1, grep("(est_sig|pval|confint)_std", names(tab)))]
 ```
 
@@ -271,7 +288,7 @@ tab$label <- gsub("\\.(FE)?MALE", "", tab$label)
 tab <- reshape(tab, timevar = "group", idvar = "label", direction = "wide")
 # Retain only columns with the standardized estimate, pvalue, and 95% CI
 row.names(tab) <- NULL
-kable_styling(knitr::kable(tab[, c(1, grep("(est_sig|pval|confint)_std", names(tab)))], digits = 2, format = "html"), latex_options = c("striped", "scale_down"))
+kbl(tab[, c(1, grep("(est_sig|pval|confint)_std", names(tab)))], digits = 2)
 ```
 
 ## Exercise 2: Alcohol use 
@@ -288,7 +305,8 @@ First, load the file `DDS8_1.dat` into the R environment. For convenience's sake
 
 ```{r read_dataalc, echo = TRUE, eval = TRUE}
 data <- read.table("DDS8_1.dat", na.strings = -99)
-names(data) <- c("ALC1YR1", "ALC1YR2", "ALC1YR3", "ALCPROB5", "AGE1", "GENDER1")
+names(data) <- c("ALC1YR1", "ALC1YR2", "ALC1YR3",
+                 "ALCPROB5", "AGE1", "GENDER1")
 ```
 
 ### Exercise 2a
@@ -330,7 +348,7 @@ m0 <- mplusObject(
   usevariables = c("ALC1YR1", "ALC1YR2", "ALC1YR3"))
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ### Exercise 2b
 
@@ -361,7 +379,8 @@ Also consider using RMSEA, CFI, TLI, and SRMR to make sure that your best-fittin
 model has acceptable objective fit.
 
 ```{r}
-# Create a vector with three "additional syntaxes" for my three different models
+# Create a vector with three "additional syntaxes"
+# for my three different models
 mod = c("i s ON GENDER1;",
         "i s ON AGE1;",
         "i s ON AGE1 GENDER1;",
@@ -373,7 +392,8 @@ mod = c("i s ON GENDER1;",
         "s ON AGE1 GENDER1;",
         "i WITH s@0;",
         "!baseline")
-# Create a list with the additional usevariables used in the three models above
+# Create a list with the additional usevariables
+# used in the three models above
 vars = list("GENDER1",
             "AGE1",
             c("GENDER1", "AGE1"),
@@ -385,17 +405,25 @@ vars = list("GENDER1",
             c("GENDER1", "AGE1"),
             NULL,
             NULL)
-# Make a list of exploratory models, by modifying a copy of the basic model m0
+# Make a list of exploratory models by modifying m0
 models <- lapply(1:length(mod), function(i){
-  m0$MODEL <- paste0(m0$MODEL, mod[i]) # append element i of mod
-  m0$usevariables <- c(m0$usevariables, vars[[i]]) # append element i of vars
-  m0$modelout = paste0("Model", i, ".inp") # Add unique filename
-  m0 # return the modified model
+  # append element i of mod
+  m0$MODEL <- paste0(m0$MODEL, mod[i]) 
+  # append element i of vars
+  m0$usevariables <- c(m0$usevariables, vars[[i]])
+  # Add unique filename
+  m0$modelout = paste0("Model", i, ".inp") 
+  # return the modified model
+  m0 
 })
 # Run all models and store results in a list called results
 results <- lapply(models, mplusModeler, run = 1L)
 # Get summary table and store it in 'tab'
-tab <- SummaryTable(results, keepCols = c("Parameters", "AIC", "BIC", "RMSEA_Estimate", "CFI", "TLI", "SRMR"), sortBy = NULL)
+tab <- SummaryTable(results, 
+                    keepCols = c("Parameters", "AIC", "BIC",
+                                 "RMSEA_Estimate", "CFI",
+                                 "TLI", "SRMR"),
+                    sortBy = NULL)
 # Order by BIC
 tab <- tab[order(tab$BIC), ]
 # Add model syntax to the table
@@ -404,26 +432,25 @@ tab
 ```
 ```{r 2b_make_table_hidden, echo = FALSE, results = "asis"}
 row.names(tab) <- NULL
-kable_styling(knitr::kable(tab, digits = 2, format = "html"), latex_options = c("striped", "scale_down"))
+kbl(tab, digits = 2)
 ```
 
 ```{r}
-# Plot the BICs and annotate with the syntax to see which model is best
+# Plot the BICs and annotate with the syntax to see which is best
 library(ggplot2)
-qplot(x = 1:11, y = tab$BIC) + geom_line() + geom_text(label = tab$Model, size = 2)
+qplot(x = 1:11, y = tab$BIC) +
+  geom_line() +
+  geom_text(label = tab$Model, size = 2)
 
 ```
-```{python, echo=FALSE, results='asis', eval=TRUE, include = show_answers}
-print("""
+
 It looks like, paradoxically, predicting I and S from either age or gender
 has the best fit. However, note that there is only a small difference between
 the smallest and the largest BIC: diff(range(tab$BIC)).
 I would either go for the simplest model (i WITH s@0), or go for the
 best-fitting model (i s ON GENDER1).
-""")
-```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ### Exercise 2c
 
@@ -450,12 +477,16 @@ Again, we can start from m0:
 ```{r}
 # Specify model with only indirect effects
 m2c_indirect <- m0
-m2c_indirect$usevariables <- c(m2c_indirect$usevariables, "AGE1", "GENDER1", "ALCPROB5")
+m2c_indirect$usevariables <- c(
+  m2c_indirect$usevariables,
+  "AGE1", "GENDER1", "ALCPROB5")
 m2c_indirect$VARIABLE <- "CATEGORICAL = ALCPROB5;"
-m2c_indirect$MODEL <- paste0(m0$MODEL, "i on AGE1 GENDER1;
-                                        i WITH s;
-                                        ALCPROB5 on i s;
-                                        ALCPROB5 on AGE1 GENDER1;")
+m2c_indirect$MODEL <- paste0(
+  m0$MODEL,
+  "i on AGE1 GENDER1;
+  i WITH s;
+  ALCPROB5 on i s;
+  ALCPROB5 on AGE1 GENDER1;")
 m2c_indirect$SAVEDATA <- "difftest is mediation.dat;"
 m2c_indirect$modelout <- "m2c_indirect.inp"
 # Run all models and store results in a list called results
@@ -463,7 +494,7 @@ result_ind <- mplusModeler(m2c_indirect, run = 1L)
 
 # Specify model with direct effects too
 m2c_direct <- m2c_indirect
-# Replace direct effects with a constrained effect (constrained to 0)
+# Constrain direct effects to 0 using gsub (replace)
 m2c_direct$MODEL <- gsub("ALCPROB5 on AGE1 GENDER1;",
                          "ALCPROB5 on AGE1 GENDER1@0;",
                          m2c_direct$MODEL,
@@ -479,14 +510,13 @@ get_summaries(result_dir)
 get_summaries(result_dir)
 # kable_styling(knitr::kable(get_summaries(result_dir), digits = 2, format = "html"), latex_options = c("striped", "scale_down"))
 ```
-```{python, echo=FALSE, results='asis', eval=TRUE, include = show_answers}
-print("""
+
+
 Note that the ChiSqDiffTest_PValue is non-significant, which means we can
 prefer the simpler (no direct effects) model. There is full mediation.
 
 Let's use a graph to examine the unconstrained model too:
-""")
-```
+
 ```{r}
 lo <- get_layout("AGE1",    "", "",
                  "",        "I",  "ALCPROB5",
@@ -494,7 +524,7 @@ lo <- get_layout("AGE1",    "", "",
 graph_sem(result_ind, layout = lo)
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ## Exercise 3: Level and Shape Parameterization 
 
@@ -542,10 +572,10 @@ tab[, c("label", "est_sig", "pval", "confint")]
 
 ```{r, echo = FALSE, results = "asis"}
 row.names(tab) <- NULL
-kable_styling(knitr::kable(tab[, c("label", "est_sig", "pval", "confint")], digits = 2, format = "html"), latex_options = c("striped", "scale_down"))
+kbl(tab[, c("label", "est_sig", "pval", "confint")], digits = 2)
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ### Exercise 3b
 
@@ -573,10 +603,10 @@ tab[, c("label", "est_sig", "pval", "confint")]
 
 ```{r, echo = FALSE, results = "asis"}
 row.names(tab) <- NULL
-kable_styling(knitr::kable(tab[, c("label", "est_sig", "pval", "confint")], digits = 2, format = "html"), latex_options = c("striped", "scale_down"))
+kbl(tab[, c("label", "est_sig", "pval", "confint")])
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 Which parameterization do you like best?
 
@@ -601,7 +631,7 @@ m3b$PLOT <- "SERIES = GPA1-GPA6 (s);
 res_3b <- mplusModeler(m3b, run = 1L)
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ### Exercise 3d
 
@@ -629,10 +659,10 @@ tab[, c("label", "est_sig", "pval", "confint")]
 
 ```{r, echo = FALSE, results = "asis"}
 row.names(tab) <- NULL
-kable_styling(knitr::kable(tab[, c("label", "est_sig", "pval", "confint")], digits = 2, format = "html"), latex_options = c("striped", "scale_down"))
+kbl(tab[, c("label", "est_sig", "pval", "confint")])
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ## Exercise 4: latent growth model on GPA data 
 
@@ -656,7 +686,8 @@ m4$MODEL <- "i s | gpa1@0 gpa2@1 gpa3@2 gpa4@3 gpa5@4 gpa6@5;"
 m4$modelout <- "m4.inp"
 res_4 <- mplusModeler(m4, run = 1L)
 # Get the requested fit indices:
-get_summaries(res_4)[c("AIC", "BIC", "ChiSqM_Value", "RMSEA_Estimate", "CFI", "TLI")]
+get_summaries(res_4)[c("AIC", "BIC", "ChiSqM_Value",
+                       "RMSEA_Estimate", "CFI", "TLI")]
 # Get all columns of results
 tab <- table_results(res_4, columns = NULL)
 # Retain only regressions on I and S
@@ -672,16 +703,17 @@ m4$modelout <- "m4.inp"
 res_4 <- mplusModeler(m4, run = 1L)
 # Get the requested fit indices:
 })
-get_summaries(res_4)[c("AIC", "BIC", "ChiSqM_Value", "RMSEA_Estimate", "CFI", "TLI")]
+get_summaries(res_4)[c("AIC", "BIC", "ChiSqM_Value",
+                       "RMSEA_Estimate", "CFI", "TLI")]
 # Get all columns of results
 tab <- table_results(res_4, columns = NULL)
 # Retain only regressions on I and S
 tab <- tab[tab$lhs %in% c("I", "S") & tab$op %in% c("~~", "~1"), ]
 row.names(tab) <- NULL
-kable_styling(knitr::kable(tab[, c("label", "est_sig", "pval", "confint")], digits = 2, format = "html"), latex_options = c("striped", "scale_down"))
+kbl(tab[, c("label", "est_sig", "pval", "confint")])
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
 
 ### Exercise 4b
 
@@ -726,7 +758,8 @@ m4b$MODEL <- "year1 by gpa1@1 gpa2 (a);
              year3@.001;"
 res_4b <- mplusModeler(m4b, run = 1L)
 # Get the requested fit indices:
-get_summaries(res_4b)[c("AIC", "BIC", "ChiSqM_Value", "RMSEA_Estimate", "CFI", "TLI")]
+get_summaries(res_4b)[c("AIC", "BIC", "ChiSqM_Value",
+                        "RMSEA_Estimate", "CFI", "TLI")]
 # Get all columns of results
 tab <- table_results(res_4b, columns = NULL)
 # Retain only regressions on I and S
@@ -754,7 +787,7 @@ tab <- table_results(res_4b, columns = NULL)
 # Retain only regressions on I and S
 tab <- tab[tab$lhs %in% c("I", "S") & tab$op %in% c("~~", "~1"), ]
 row.names(tab) <- NULL
-kable_styling(knitr::kable(tab[, c("label", "est_sig", "pval", "confint")], digits = 2, format = "html"), latex_options = c("striped", "scale_down"))
+kbl(tab[, c("label", "est_sig", "pval", "confint")])
 ```
 
-\details
+`r if(knitr::is_html_output()){"\\details"}`
