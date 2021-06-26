@@ -236,18 +236,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <b>Click to show answers</b>
 </summary>
 <p>This can be done as follows, using m3 as starting point:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-1" aria-hidden="true" tabindex="-1"></a>m4 <span class="ot">&lt;-</span> m3</span>
-<span id="cb22-2"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-2" aria-hidden="true" tabindex="-1"></a>m4<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="st">&quot;i s | gpa1@0 gpa2@1 gpa3@2 gpa4@3 gpa5@4 gpa6@5;&quot;</span></span>
-<span id="cb22-3"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-3" aria-hidden="true" tabindex="-1"></a>m4<span class="sc">$</span>modelout <span class="ot">&lt;-</span> <span class="st">&quot;m4.inp&quot;</span></span>
-<span id="cb22-4"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-4" aria-hidden="true" tabindex="-1"></a>res_4 <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(m4, <span class="at">run =</span> 1L)</span>
-<span id="cb22-5"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the requested fit indices:</span></span>
-<span id="cb22-6"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">get_summaries</span>(res_4)[<span class="fu">c</span>(<span class="st">&quot;AIC&quot;</span>, <span class="st">&quot;BIC&quot;</span>, <span class="st">&quot;ChiSqM_Value&quot;</span>,</span>
-<span id="cb22-7"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-7" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;RMSEA_Estimate&quot;</span>, <span class="st">&quot;CFI&quot;</span>, <span class="st">&quot;TLI&quot;</span>)]</span>
-<span id="cb22-8"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Get all columns of results</span></span>
-<span id="cb22-9"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-9" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table_results</span>(res_4, <span class="at">columns =</span> <span class="cn">NULL</span>)</span>
-<span id="cb22-10"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only regressions on I and S</span></span>
-<span id="cb22-11"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-11" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[tab<span class="sc">$</span>lhs <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;I&quot;</span>, <span class="st">&quot;S&quot;</span>) <span class="sc">&amp;</span> tab<span class="sc">$</span>op <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;~~&quot;</span>, <span class="st">&quot;~1&quot;</span>), ]</span>
-<span id="cb22-12"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb22-12" aria-hidden="true" tabindex="-1"></a>tab[, <span class="fu">c</span>(<span class="st">&quot;label&quot;</span>, <span class="st">&quot;est_sig&quot;</span>, <span class="st">&quot;pval&quot;</span>, <span class="st">&quot;confint&quot;</span>)]</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb25-1" aria-hidden="true" tabindex="-1"></a>m4 <span class="ot">&lt;-</span> m3</span>
+<span id="cb25-2"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb25-2" aria-hidden="true" tabindex="-1"></a>m4<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="st">&quot;i s | gpa1@0 gpa2@1 gpa3@2 gpa4@3 gpa5@4 gpa6@5;&quot;</span></span>
+<span id="cb25-3"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb25-3" aria-hidden="true" tabindex="-1"></a>m4<span class="sc">$</span>modelout <span class="ot">&lt;-</span> <span class="st">&quot;m4.inp&quot;</span></span>
+<span id="cb25-4"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb25-4" aria-hidden="true" tabindex="-1"></a>res_4 <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(m4, <span class="at">run =</span> 1L)</span>
+<span id="cb25-5"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the requested fit indices:</span></span>
+<span id="cb25-6"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">get_summaries</span>(res_4)[<span class="fu">c</span>(<span class="st">&quot;AIC&quot;</span>, <span class="st">&quot;BIC&quot;</span>, <span class="st">&quot;ChiSqM_Value&quot;</span>,</span>
+<span id="cb25-7"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb25-7" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;RMSEA_Estimate&quot;</span>, <span class="st">&quot;CFI&quot;</span>, <span class="st">&quot;TLI&quot;</span>)]</span>
+<span id="cb25-8"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Get all columns of results</span></span>
+<span id="cb25-9"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb25-9" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table_results</span>(res_4, <span class="at">columns =</span> <span class="cn">NULL</span>)</span>
+<span id="cb25-10"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only regressions on I and S</span></span>
+<span id="cb25-11"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb25-11" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[tab<span class="sc">$</span>lhs <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;I&quot;</span>, <span class="st">&quot;S&quot;</span>) <span class="sc">&amp;</span> tab<span class="sc">$</span>op <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;~~&quot;</span>, <span class="st">&quot;~1&quot;</span>), ]</span>
+<span id="cb25-12"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb25-12" aria-hidden="true" tabindex="-1"></a>tab[, <span class="fu">c</span>(<span class="st">&quot;label&quot;</span>, <span class="st">&quot;est_sig&quot;</span>, <span class="st">&quot;pval&quot;</span>, <span class="st">&quot;confint&quot;</span>)]</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["AIC"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["BIC"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_Value"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["RMSEA_Estimate"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["CFI"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["TLI"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"121","2":"157","3":"44","4":"0.093","5":"0.96","6":"0.97"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -357,7 +357,7 @@ COULD INDICATE A NEGATIVE VARIANCE/RESIDUAL VARIANCE FOR A LATENT VARIABLE, A CO
 GREATER OR EQUAL TO ONE BETWEEN TWO LATENT VARIABLES, OR A LINEAR DEPENDENCY AMONG MORE 
 THAN TWO LATENT VARIABLES. CHECK THE TECH4 OUTPUT FOR MORE INFORMATION. </code></pre>
 <p>A rough way to deal with this problem may be to fix the problematic parameter to a particular value (ie. .001), try this and re-run the model.</p>
-<p>Now examine the same parameters as for exercise 3a, and compare the two. Are there
+<p>Now examine the same parameters as for exercise 4a, and compare the two. Are there
 major differences?</p>
 <ul>
 <li>AIC/BIC, Chi Square, RMSEA, CFI/TLI</li>
@@ -368,24 +368,29 @@ major differences?</p>
 <summary>
 <b>Click to show answers</b>
 </summary>
-<p>This can be done as follows, using m3 as starting point:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-1" aria-hidden="true" tabindex="-1"></a>m4b <span class="ot">&lt;-</span> m4</span>
-<span id="cb24-2"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-2" aria-hidden="true" tabindex="-1"></a>m4b<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="st">&quot;year1 by gpa1@1 gpa2 (a);</span></span>
-<span id="cb24-3"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="st">             year2 by gpa3@1 gpa4 (a); </span></span>
-<span id="cb24-4"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="st">             year3 by gpa5@1 gpa6 (a);</span></span>
-<span id="cb24-5"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="st">             [gpa1@0 gpa2@0 gpa3@0 gpa4@0 gpa5@0 gpa6@0];</span></span>
-<span id="cb24-6"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="st">             i s | year1@0 year2@1 year3@2;</span></span>
-<span id="cb24-7"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="st">             [i s];</span></span>
-<span id="cb24-8"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="st">             year3@.001;&quot;</span></span>
-<span id="cb24-9"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-9" aria-hidden="true" tabindex="-1"></a>res_4b <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(m4b, <span class="at">run =</span> 1L)</span>
-<span id="cb24-10"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the requested fit indices:</span></span>
-<span id="cb24-11"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="fu">get_summaries</span>(res_4b)[<span class="fu">c</span>(<span class="st">&quot;AIC&quot;</span>, <span class="st">&quot;BIC&quot;</span>, <span class="st">&quot;ChiSqM_Value&quot;</span>,</span>
-<span id="cb24-12"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-12" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;RMSEA_Estimate&quot;</span>, <span class="st">&quot;CFI&quot;</span>, <span class="st">&quot;TLI&quot;</span>)]</span>
-<span id="cb24-13"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Get all columns of results</span></span>
-<span id="cb24-14"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-14" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table_results</span>(res_4b, <span class="at">columns =</span> <span class="cn">NULL</span>)</span>
-<span id="cb24-15"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only regressions on I and S</span></span>
-<span id="cb24-16"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-16" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[tab<span class="sc">$</span>lhs <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;I&quot;</span>, <span class="st">&quot;S&quot;</span>) <span class="sc">&amp;</span> tab<span class="sc">$</span>op <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;~~&quot;</span>, <span class="st">&quot;~1&quot;</span>), ]</span>
-<span id="cb24-17"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb24-17" aria-hidden="true" tabindex="-1"></a>tab[, <span class="fu">c</span>(<span class="st">&quot;label&quot;</span>, <span class="st">&quot;est_sig&quot;</span>, <span class="st">&quot;pval&quot;</span>, <span class="st">&quot;confint&quot;</span>)]</span></code></pre></div>
+<p>This can be done as follows, using m4 as starting point:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-1" aria-hidden="true" tabindex="-1"></a>m4b <span class="ot">&lt;-</span> m4</span>
+<span id="cb27-2"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-2" aria-hidden="true" tabindex="-1"></a>m4b<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="st">&quot;year1 by gpa1@1 gpa2 (a);</span></span>
+<span id="cb27-3"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="st">             year2 by gpa3@1 gpa4 (a); </span></span>
+<span id="cb27-4"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="st">             year3 by gpa5@1 gpa6 (a);</span></span>
+<span id="cb27-5"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="st">             [gpa1@0 gpa2@0 gpa3@0 gpa4@0 gpa5@0 gpa6@0];</span></span>
+<span id="cb27-6"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="st">             i s | year1@0 year2@1 year3@2;</span></span>
+<span id="cb27-7"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="st">             [i s];</span></span>
+<span id="cb27-8"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-8" aria-hidden="true" tabindex="-1"></a><span class="st">             year3@.001;&quot;</span></span>
+<span id="cb27-9"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-9" aria-hidden="true" tabindex="-1"></a>res_4b <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(m4b, <span class="at">run =</span> 1L)</span>
+<span id="cb27-10"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the requested fit indices:</span></span>
+<span id="cb27-11"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-11" aria-hidden="true" tabindex="-1"></a><span class="fu">get_summaries</span>(res_4b)[<span class="fu">c</span>(<span class="st">&quot;AIC&quot;</span>, <span class="st">&quot;BIC&quot;</span>, <span class="st">&quot;ChiSqM_Value&quot;</span>,</span>
+<span id="cb27-12"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-12" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;RMSEA_Estimate&quot;</span>, <span class="st">&quot;CFI&quot;</span>, <span class="st">&quot;TLI&quot;</span>)]</span>
+<span id="cb27-13"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Get all columns of results</span></span>
+<span id="cb27-14"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-14" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table_results</span>(res_4b, <span class="at">columns =</span> <span class="cn">NULL</span>)</span>
+<span id="cb27-15"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only regressions on I and S</span></span>
+<span id="cb27-16"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-16" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[tab<span class="sc">$</span>lhs <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;I&quot;</span>, <span class="st">&quot;S&quot;</span>) <span class="sc">&amp;</span> tab<span class="sc">$</span>op <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">&quot;~~&quot;</span>, <span class="st">&quot;~1&quot;</span>), ]</span>
+<span id="cb27-17"><a href="exercise-4-latent-growth-model-on-gpa-data.html#cb27-17" aria-hidden="true" tabindex="-1"></a>tab[, <span class="fu">c</span>(<span class="st">&quot;label&quot;</span>, <span class="st">&quot;est_sig&quot;</span>, <span class="st">&quot;pval&quot;</span>, <span class="st">&quot;confint&quot;</span>)]</span></code></pre></div>
+<p>Note that, without <code>year3@.001</code>, this code gives an error message: The variance of the latent variable year3 is
+estimated negatively which is problematic since variances should always be positive. A
+simple way to deal with the problem of the latent variance of year3 is to fix it to a very small
+value (.001) for instance, as it would also be illogical to fix a variance to 0. To do this, simply
+add this to your input file under model: year3@.001;</p>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["AIC"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["BIC"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_Value"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["RMSEA_Estimate"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["CFI"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["TLI"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"130","2":"177","3":"48","4":"0.12","5":"0.96","6":"0.95"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -481,6 +486,13 @@ Variances.S
 </tr>
 </tbody>
 </table>
+<p>Compare the estimates from the two models. Are there major differences?
+If you inspect the output carefully (and provided you have requested standardized
+estimates) you will notice that the latent variables year2 and year3 have a correlation of 1.
+So the negative variance is the result of a multicollinearity problem. It is apparently better to
+analyze these data using only the observed variables gpa1-gpa6. Creating latent variables
+per year does not work well.
+In line with this interpretation, the fit and results of the simple latent growth model look better than the 2nd order latent growth curve model.</p>
 
 </div>
 </div>
@@ -543,6 +555,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

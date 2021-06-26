@@ -223,9 +223,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="exercise-1-burn-survivors" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Exercise 1: burn survivors</h2>
-<p>The file “PTSD.dat” contains another data set on burn survivors.
+<p>The file <code>“PTSD.dat”</code> contains data on burn survivors.
 An incomplete, basic Mplus syntax can be found in the file
-“PTSD - M0.inp.”</p>
+<code>“PTSD - M0.inp”</code>.</p>
 <p>Specifying that same syntax could be done in R, using <code>MplusAutomation</code>, as well.
 First, load the file <code>PTSD.dat</code> into the R environment.
 For convenience’s sake, rename the columns of the data object to something a human would understand:</p>
@@ -246,6 +246,7 @@ For convenience’s sake, rename the columns of the data object to something a h
 <span id="cb3-10"><a href="exercise-1-burn-survivors.html#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
 <p>To evaluate this model, you can use:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="exercise-1-burn-survivors.html#cb4-1" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(basic, <span class="at">modelout =</span> <span class="st">&quot;basic.inp&quot;</span>, <span class="at">run =</span> 1L)</span></code></pre></div>
+<p>The argument <code>run = 1L</code> creates the Mplus input file and data, evaluates the input file, thus creating an output file, and reads the results into R.</p>
 <p>To summarize the results, you can use:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="exercise-1-burn-survivors.html#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For one model</span></span>
 <span id="cb5-2"><a href="exercise-1-burn-survivors.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">SummaryTable</span>(result)</span>
@@ -258,7 +259,7 @@ For convenience’s sake, rename the columns of the data object to something a h
 predictor variables.<br />
 Think about:</p>
 <ul>
-<li>which metric of time to use (see the SPSS file form more information about the variables);</li>
+<li>which metric of time to use (see the SPSS file for more information about the variables);</li>
 <li>the shape of the function (linear or quadratic);
 and base your decision of the best model on:<br />
 </li>
@@ -271,7 +272,27 @@ and base your decision of the best model on:<br />
 <summary>
 <b>Click to show answers</b>
 </summary>
-<p>Here is an example of how to approach the problem:</p>
+<p><strong>Deciding on the metric of time </strong></p>
+<p>From the SPSS file variable descriptions:</p>
+<ul>
+<li>SVL wave 1 (2 weeks after burn injury)</li>
+<li>SVL wave 2 (4 weeks)</li>
+<li>SVL wave 3 (2 months)</li>
+<li>SVL wave 4 (4 months)</li>
+<li>SVL wave 5 (6 months)</li>
+<li>SVL wave 6 (9 months)</li>
+<li>SVL wave 7 (12 months)</li>
+<li>SVL wave 8 (18 months)</li>
+</ul>
+<p>Based on these descriptions, I’ve chosen for the following specification of time in the LGM:</p>
+<p><code>"i s | W1@0.5 W2@1 W3@2 W4@4 W5@6 W6@9 W7@12 W8@18;"</code></p>
+<p>In this specification I set the first time point to 0.5 months after burn injury (approximation
+of 2 weeks after burn injury), the second time point to 1 month after burn injury
+(approximation of 4 weeks after burn injury), etc.</p>
+<p><strong>Deciding on Linear v.s. Linear + Quadratic slope</strong></p>
+<p>Some example syntaxes for running models with different trajectory shapes are shown below, along with a table of the resulting fit statistics.</p>
+<p>For the model with a quadratic slope, it was necessary to fix the variance of Q at 0 to ensure convergence (you can do this by
+adding <a href="mailto:q@0" class="email">q@0</a>; to the syntax). For both models, only CFI and TLI indicate adequate fit.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="exercise-1-burn-survivors.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># First, create a linear model from the basic one</span></span>
 <span id="cb6-2"><a href="exercise-1-burn-survivors.html#cb6-2" aria-hidden="true" tabindex="-1"></a>linear <span class="ot">&lt;-</span> basic</span>
 <span id="cb6-3"><a href="exercise-1-burn-survivors.html#cb6-3" aria-hidden="true" tabindex="-1"></a>linear<span class="sc">$</span>MODEL <span class="ot">&lt;-</span></span>
@@ -330,32 +351,6 @@ SRMR
 <tbody>
 <tr>
 <td style="text-align:left;">
-quad0.out
-</td>
-<td style="text-align:right;">
-14
-</td>
-<td style="text-align:right;">
-14037
-</td>
-<td style="text-align:right;">
-14085
-</td>
-<td style="text-align:right;">
-0.13
-</td>
-<td style="text-align:right;">
-0.94
-</td>
-<td style="text-align:right;">
-0.94
-</td>
-<td style="text-align:right;">
-0.08
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
 linear.out
 </td>
 <td style="text-align:right;">
@@ -406,56 +401,232 @@ NA
 NA
 </td>
 </tr>
+<tr>
+<td style="text-align:left;">
+quad0.out
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+14037
+</td>
+<td style="text-align:right;">
+14085
+</td>
+<td style="text-align:right;">
+0.13
+</td>
+<td style="text-align:right;">
+0.94
+</td>
+<td style="text-align:right;">
+0.94
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+</tr>
+</tbody>
+</table>
+<p>Model comparison tools: To see which model fit the data better, we can do a Chi-square
+difference test, using the function <code>chisq_sb()</code> from the <code>tidySEM</code> package. It works directly on MplusAutomation’s <code>SummaryTable</code>s:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="exercise-1-burn-survivors.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidySEM)</span>
+<span id="cb7-2"><a href="exercise-1-burn-survivors.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">chisq_sb</span>(<span class="fu">SummaryTable</span>(<span class="fu">list</span>(result_linear, result_quad0), <span class="at">keepCols =</span> <span class="fu">c</span>(<span class="st">&quot;Filename&quot;</span>, <span class="st">&quot;ChiSqM_Value&quot;</span>, <span class="st">&quot;ChiSqM_DF&quot;</span>)))</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Filename
+</th>
+<th style="text-align:right;">
+ChiSqM_Value
+</th>
+<th style="text-align:right;">
+ChiSqM_DF
+</th>
+<th style="text-align:right;">
+Dchisq
+</th>
+<th style="text-align:right;">
+Dchisq_df
+</th>
+<th style="text-align:right;">
+Dchisq_p
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+linear.out
+</td>
+<td style="text-align:right;">
+173
+</td>
+<td style="text-align:right;">
+31
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+quad0.out
+</td>
+<td style="text-align:right;">
+157
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0
+</td>
+</tr>
+</tbody>
+</table>
+<p>Note that the
+Furthermore, both AIC and BIC are lower in the
+model with a quadratic slope. Thus, model misfit is significantly lower when the quadratic
+slope is added.</p>
+<p><strong>Plots</strong></p>
+<p>To examine the plots, you must open Mplus and examine its native plots.</p>
+<p><strong>Model parameters</strong></p>
+<p>The added quadratic slope is significant (Q = 0.02, p &lt; .001), indicating that,
+on average, the growth curve does follow a quadratic curve.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="exercise-1-burn-survivors.html#cb8-1" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table_results</span>(result_quad0, <span class="at">columns =</span> <span class="cn">NULL</span>)</span>
+<span id="cb8-2"><a href="exercise-1-burn-survivors.html#cb8-2" aria-hidden="true" tabindex="-1"></a>tab[tab<span class="sc">$</span>paramheader <span class="sc">==</span> <span class="st">&quot;Means&quot;</span>, <span class="fu">c</span>(<span class="st">&quot;param&quot;</span>, <span class="st">&quot;est_sig&quot;</span>, <span class="st">&quot;pval&quot;</span>)]</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+param
+</th>
+<th style="text-align:left;">
+est_sig
+</th>
+<th style="text-align:left;">
+pval
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+I
+</td>
+<td style="text-align:left;">
+18.73***
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Q
+</td>
+<td style="text-align:left;">
+0.02***
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+S
+</td>
+<td style="text-align:left;">
+-0.65***
+</td>
+<td style="text-align:left;">
+0.00
+</td>
+</tr>
 </tbody>
 </table>
 </div>
 <div id="exercise-1b-add-covariates" class="section level3" number="2.1.2">
 <h3><span class="header-section-number">2.1.2</span> Exercise 1b: Add covariates</h3>
-<p>Using the best fitting LGM model found above, regress the growth parameters on TVLO and regress Pain
-on the growth parameters (see example from slides).
+<p>Using the best fitting LGM model found above, regress the growth parameters on TVLO and regress Pain on the growth parameters (see examples from slides 195 and 199).
 Are there gender differences in the regression of the
 growth parameters on TVLO and in the regression of Pain on the growth parameters?</p>
 <details>
 <summary>
 <b>Click to show answers</b>
 </summary>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="exercise-1-burn-survivors.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming quad0 was the best, start with that</span></span>
-<span id="cb7-2"><a href="exercise-1-burn-survivors.html#cb7-2" aria-hidden="true" tabindex="-1"></a>covs <span class="ot">&lt;-</span> quad0</span>
-<span id="cb7-3"><a href="exercise-1-burn-survivors.html#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Add to the existing model</span></span>
-<span id="cb7-4"><a href="exercise-1-burn-survivors.html#cb7-4" aria-hidden="true" tabindex="-1"></a>covs<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="fu">c</span>(covs<span class="sc">$</span>MODEL,</span>
-<span id="cb7-5"><a href="exercise-1-burn-survivors.html#cb7-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;</span></span>
-<span id="cb7-6"><a href="exercise-1-burn-survivors.html#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="st">                i s on TVLO;</span></span>
-<span id="cb7-7"><a href="exercise-1-burn-survivors.html#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="st">                pain on i s; </span></span>
-<span id="cb7-8"><a href="exercise-1-burn-survivors.html#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="st">                MODEL male:</span></span>
-<span id="cb7-9"><a href="exercise-1-burn-survivors.html#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="st">                i on TVLO (m1);</span></span>
-<span id="cb7-10"><a href="exercise-1-burn-survivors.html#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="st">                s on TVLO (m2);</span></span>
-<span id="cb7-11"><a href="exercise-1-burn-survivors.html#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="st">                pain on i (m3);</span></span>
-<span id="cb7-12"><a href="exercise-1-burn-survivors.html#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="st">                pain on s (m4);</span></span>
-<span id="cb7-13"><a href="exercise-1-burn-survivors.html#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="st">                MODEL female:</span></span>
-<span id="cb7-14"><a href="exercise-1-burn-survivors.html#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="st">                i on TVLO (f1);</span></span>
-<span id="cb7-15"><a href="exercise-1-burn-survivors.html#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="st">                s on TVLO (f2);</span></span>
-<span id="cb7-16"><a href="exercise-1-burn-survivors.html#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="st">                pain on i (f3);</span></span>
-<span id="cb7-17"><a href="exercise-1-burn-survivors.html#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="st">                pain on s (f4);&quot;</span>)</span>
-<span id="cb7-18"><a href="exercise-1-burn-survivors.html#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Add new usevariables:</span></span>
-<span id="cb7-19"><a href="exercise-1-burn-survivors.html#cb7-19" aria-hidden="true" tabindex="-1"></a>covs<span class="sc">$</span>usevariables <span class="ot">&lt;-</span> <span class="fu">c</span>(covs<span class="sc">$</span>usevariables,</span>
-<span id="cb7-20"><a href="exercise-1-burn-survivors.html#cb7-20" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;tvlo&quot;</span>, <span class="st">&quot;gender&quot;</span>, <span class="st">&quot;pain&quot;</span>)</span>
-<span id="cb7-21"><a href="exercise-1-burn-survivors.html#cb7-21" aria-hidden="true" tabindex="-1"></a>covs<span class="sc">$</span>rdata</span>
-<span id="cb7-22"><a href="exercise-1-burn-survivors.html#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Add grouping variable:</span></span>
-<span id="cb7-23"><a href="exercise-1-burn-survivors.html#cb7-23" aria-hidden="true" tabindex="-1"></a>covs<span class="sc">$</span>VARIABLE <span class="ot">&lt;-</span> <span class="st">&quot;GROUPING IS gender (1 = male 2 = female);&quot;</span></span>
-<span id="cb7-24"><a href="exercise-1-burn-survivors.html#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Add parameter tests</span></span>
-<span id="cb7-25"><a href="exercise-1-burn-survivors.html#cb7-25" aria-hidden="true" tabindex="-1"></a>covs<span class="sc">$</span>MODELTEST <span class="ot">&lt;-</span> <span class="st">&quot;m3 = f3; m4 = f4;&quot;</span></span>
-<span id="cb7-26"><a href="exercise-1-burn-survivors.html#cb7-26" aria-hidden="true" tabindex="-1"></a>                </span>
-<span id="cb7-27"><a href="exercise-1-burn-survivors.html#cb7-27" aria-hidden="true" tabindex="-1"></a>result_covs <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(covs,</span>
-<span id="cb7-28"><a href="exercise-1-burn-survivors.html#cb7-28" aria-hidden="true" tabindex="-1"></a>                            <span class="at">modelout =</span> <span class="st">&quot;covs.inp&quot;</span>,</span>
-<span id="cb7-29"><a href="exercise-1-burn-survivors.html#cb7-29" aria-hidden="true" tabindex="-1"></a>                            <span class="at">run =</span> 1L)</span>
-<span id="cb7-30"><a href="exercise-1-burn-survivors.html#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtain the model summaries; you need the Wald test for</span></span>
-<span id="cb7-31"><a href="exercise-1-burn-survivors.html#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co"># the parameter difference tests.</span></span>
-<span id="cb7-32"><a href="exercise-1-burn-survivors.html#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="fu">get_summaries</span>(result_covs)</span></code></pre></div>
+<p>To answer this question, we use multi-group analysis.
+To do this with MplusAutomation, we add the
+following syntax to the VARIABLE argument:</p>
+<p><code>VARIABLE = "GROUPING IS gender (1 = male 2 = female);"</code></p>
+<p>Since we needed to fix the quadratic slope variance to 0, we cannot estimate any
+regressions on the quadratic slope or use the quadratic slope as a predictor of some
+outcome. We therefore focus on the intercept and linear slope.</p>
+<p>Here is how we can specify the full syntax (starting with the quad0 model as base):</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="exercise-1-burn-survivors.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming quad0 was the best, start with that</span></span>
+<span id="cb9-2"><a href="exercise-1-burn-survivors.html#cb9-2" aria-hidden="true" tabindex="-1"></a>covs <span class="ot">&lt;-</span> quad0</span>
+<span id="cb9-3"><a href="exercise-1-burn-survivors.html#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Add to the existing model</span></span>
+<span id="cb9-4"><a href="exercise-1-burn-survivors.html#cb9-4" aria-hidden="true" tabindex="-1"></a>covs<span class="sc">$</span>MODEL <span class="ot">&lt;-</span> <span class="fu">c</span>(covs<span class="sc">$</span>MODEL,</span>
+<span id="cb9-5"><a href="exercise-1-burn-survivors.html#cb9-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;</span></span>
+<span id="cb9-6"><a href="exercise-1-burn-survivors.html#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="st">                i s on TVLO;</span></span>
+<span id="cb9-7"><a href="exercise-1-burn-survivors.html#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="st">                pain on i s; </span></span>
+<span id="cb9-8"><a href="exercise-1-burn-survivors.html#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="st">                MODEL male:</span></span>
+<span id="cb9-9"><a href="exercise-1-burn-survivors.html#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="st">                i on TVLO (m1);</span></span>
+<span id="cb9-10"><a href="exercise-1-burn-survivors.html#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="st">                s on TVLO (m2);</span></span>
+<span id="cb9-11"><a href="exercise-1-burn-survivors.html#cb9-11" aria-hidden="true" tabindex="-1"></a><span class="st">                pain on i (m3);</span></span>
+<span id="cb9-12"><a href="exercise-1-burn-survivors.html#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="st">                pain on s (m4);</span></span>
+<span id="cb9-13"><a href="exercise-1-burn-survivors.html#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="st">                MODEL female:</span></span>
+<span id="cb9-14"><a href="exercise-1-burn-survivors.html#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="st">                i on TVLO (f1);</span></span>
+<span id="cb9-15"><a href="exercise-1-burn-survivors.html#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="st">                s on TVLO (f2);</span></span>
+<span id="cb9-16"><a href="exercise-1-burn-survivors.html#cb9-16" aria-hidden="true" tabindex="-1"></a><span class="st">                pain on i (f3);</span></span>
+<span id="cb9-17"><a href="exercise-1-burn-survivors.html#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="st">                pain on s (f4);&quot;</span>)</span>
+<span id="cb9-18"><a href="exercise-1-burn-survivors.html#cb9-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Add new usevariables:</span></span>
+<span id="cb9-19"><a href="exercise-1-burn-survivors.html#cb9-19" aria-hidden="true" tabindex="-1"></a>covs<span class="sc">$</span>usevariables <span class="ot">&lt;-</span> <span class="fu">c</span>(covs<span class="sc">$</span>usevariables,</span>
+<span id="cb9-20"><a href="exercise-1-burn-survivors.html#cb9-20" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;tvlo&quot;</span>, <span class="st">&quot;gender&quot;</span>, <span class="st">&quot;pain&quot;</span>)</span>
+<span id="cb9-21"><a href="exercise-1-burn-survivors.html#cb9-21" aria-hidden="true" tabindex="-1"></a>covs<span class="sc">$</span>rdata</span>
+<span id="cb9-22"><a href="exercise-1-burn-survivors.html#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Add grouping variable:</span></span>
+<span id="cb9-23"><a href="exercise-1-burn-survivors.html#cb9-23" aria-hidden="true" tabindex="-1"></a>covs<span class="sc">$</span>VARIABLE <span class="ot">&lt;-</span> <span class="st">&quot;GROUPING IS gender (1 = male 2 = female);&quot;</span></span>
+<span id="cb9-24"><a href="exercise-1-burn-survivors.html#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Add parameter tests</span></span>
+<span id="cb9-25"><a href="exercise-1-burn-survivors.html#cb9-25" aria-hidden="true" tabindex="-1"></a>covs<span class="sc">$</span>MODELTEST <span class="ot">&lt;-</span> <span class="st">&quot;m3 = f3; m4 = f4;&quot;</span></span>
+<span id="cb9-26"><a href="exercise-1-burn-survivors.html#cb9-26" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb9-27"><a href="exercise-1-burn-survivors.html#cb9-27" aria-hidden="true" tabindex="-1"></a>result_covs <span class="ot">&lt;-</span> <span class="fu">mplusModeler</span>(covs,</span>
+<span id="cb9-28"><a href="exercise-1-burn-survivors.html#cb9-28" aria-hidden="true" tabindex="-1"></a>                            <span class="at">modelout =</span> <span class="st">&quot;covs.inp&quot;</span>,</span>
+<span id="cb9-29"><a href="exercise-1-burn-survivors.html#cb9-29" aria-hidden="true" tabindex="-1"></a>                            <span class="at">run =</span> 1L)</span>
+<span id="cb9-30"><a href="exercise-1-burn-survivors.html#cb9-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Obtain the model summaries; you need the Wald test for</span></span>
+<span id="cb9-31"><a href="exercise-1-burn-survivors.html#cb9-31" aria-hidden="true" tabindex="-1"></a><span class="co"># the parameter difference tests.</span></span>
+<span id="cb9-32"><a href="exercise-1-burn-survivors.html#cb9-32" aria-hidden="true" tabindex="-1"></a><span class="fu">get_summaries</span>(result_covs)</span></code></pre></div>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":["Mplus.version"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Title"],"name":[2],"type":["chr"],"align":["left"]},{"label":["AnalysisType"],"name":[3],"type":["chr"],"align":["left"]},{"label":["DataType"],"name":[4],"type":["chr"],"align":["left"]},{"label":["Estimator"],"name":[5],"type":["chr"],"align":["left"]},{"label":["Observations"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["NGroups"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["NDependentVars"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["NIndependentVars"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["NContinuousLatentVars"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["Parameters"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_Value"],"name":[12],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_DF"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["ChiSqM_PValue"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["ChiSqBaseline_Value"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["ChiSqBaseline_DF"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["ChiSqBaseline_PValue"],"name":[17],"type":["dbl"],"align":["right"]},{"label":["LL"],"name":[18],"type":["dbl"],"align":["right"]},{"label":["UnrestrictedLL"],"name":[19],"type":["dbl"],"align":["right"]},{"label":["CFI"],"name":[20],"type":["dbl"],"align":["right"]},{"label":["TLI"],"name":[21],"type":["dbl"],"align":["right"]},{"label":["AIC"],"name":[22],"type":["dbl"],"align":["right"]},{"label":["BIC"],"name":[23],"type":["dbl"],"align":["right"]},{"label":["aBIC"],"name":[24],"type":["dbl"],"align":["right"]},{"label":["RMSEA_Estimate"],"name":[25],"type":["dbl"],"align":["right"]},{"label":["RMSEA_90CI_LB"],"name":[26],"type":["dbl"],"align":["right"]},{"label":["RMSEA_90CI_UB"],"name":[27],"type":["dbl"],"align":["right"]},{"label":["RMSEA_pLT05"],"name":[28],"type":["dbl"],"align":["right"]},{"label":["WaldChiSq_Value"],"name":[29],"type":["dbl"],"align":["right"]},{"label":["WaldChiSq_DF"],"name":[30],"type":["dbl"],"align":["right"]},{"label":["WaldChiSq_PValue"],"name":[31],"type":["dbl"],"align":["right"]},{"label":["SRMR"],"name":[32],"type":["dbl"],"align":["right"]},{"label":["AICC"],"name":[33],"type":["dbl"],"align":["right"]},{"label":["Filename"],"name":[34],"type":["chr"],"align":["left"]}],"data":[{"1":"8.6","2":"exercise 1","3":"GENERAL","4":"INDIVIDUAL","5":"ML","6":"240","7":"2","8":"9","9":"1","10":"3","11":"38","12":"285","13":"88","14":"0","15":"2316","16":"90","17":"0","18":"-7959","19":"-7817","20":"0.91","21":"0.91","22":"15994","23":"16127","24":"16006","25":"0.14","26":"0.12","27":"0.15","28":"0","29":"0.5","30":"2","31":"0.78","32":"0.089","33":"16009","34":"covs.out"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
+<p>This is only an illustrative example for how to approach this analysis; your specific execution may differ.</p>
+<p>Note that in this example, the Wald <span class="math inline">\(\chi^2\)</span> p-value is not significant.
+That means that there are no significant sex differences in the effect of the growth trajectory on pain.</p>
+<p>Note that the Wald test is an overall test of <strong>all</strong>
+comparisons that we specify in <code>MODELTEST</code>.</p>
+<p>Thus, if you want a separate test for the regression of TVLO on the growth parameters,
+you need to re-run the analysis but with a different <code>MODELTEST</code> argument.</p>
+<p>What is your conclusion about the other research question (regarding TVLO)?</p>
+<p>Note that there are also other ways to test these hypotheses, aside from a Wald test.
+Model comparisons would also be a feasible way; either using AIC/BIC, or using a Chi square / Likelihood ratio test to compare models with parameters free vs constrained.
+For this, you could use the function <code>chisq_sb()</code> as before.
+</p>
 <div id="visualization" class="section level4" number="2.1.2.1">
 <h4><span class="header-section-number">2.1.2.1</span> Visualization</h4>
 <p>If you want to plot the model for these two groups,
@@ -463,12 +634,12 @@ you can use the SEM graphing package <code>tidySEM</code>.
 This flexible package produces fully customizable plots based on the R graphing package <code>ggplot2</code> for Mplus (and <code>lavaan</code>) models.
 If you want to make publication quality graphs, <a href="https://cjvanlissa.github.io/tidySEM/articles/Plotting_graphs.html">here is an online tutorial for graph customization</a>.
 The script below demonstrates how to plot a model using <code>tidySEM</code>. Assuming that we only want to visualize the regression part of the model, you could specify:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="exercise-1-burn-survivors.html#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidySEM)</span>
-<span id="cb8-2"><a href="exercise-1-burn-survivors.html#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
-<span id="cb8-3"><a href="exercise-1-burn-survivors.html#cb8-3" aria-hidden="true" tabindex="-1"></a>lo <span class="ot">&lt;-</span> <span class="fu">get_layout</span>(<span class="st">&quot;&quot;</span>,     <span class="st">&quot;I&quot;</span>,   <span class="st">&quot;&quot;</span>,</span>
-<span id="cb8-4"><a href="exercise-1-burn-survivors.html#cb8-4" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;TVLO&quot;</span>, <span class="st">&quot;&quot;</span>,   <span class="st">&quot;PAIN&quot;</span>,</span>
-<span id="cb8-5"><a href="exercise-1-burn-survivors.html#cb8-5" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;&quot;</span>,     <span class="st">&quot;S&quot;</span>,   <span class="st">&quot;&quot;</span>, <span class="at">rows =</span> <span class="dv">3</span>)</span>
-<span id="cb8-6"><a href="exercise-1-burn-survivors.html#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">graph_sem</span>(result_covs, <span class="at">layout =</span> lo)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="exercise-1-burn-survivors.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidySEM)</span>
+<span id="cb10-2"><a href="exercise-1-burn-survivors.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb10-3"><a href="exercise-1-burn-survivors.html#cb10-3" aria-hidden="true" tabindex="-1"></a>lo <span class="ot">&lt;-</span> <span class="fu">get_layout</span>(<span class="st">&quot;&quot;</span>,     <span class="st">&quot;I&quot;</span>,   <span class="st">&quot;&quot;</span>,</span>
+<span id="cb10-4"><a href="exercise-1-burn-survivors.html#cb10-4" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;TVLO&quot;</span>, <span class="st">&quot;&quot;</span>,   <span class="st">&quot;PAIN&quot;</span>,</span>
+<span id="cb10-5"><a href="exercise-1-burn-survivors.html#cb10-5" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;&quot;</span>,     <span class="st">&quot;S&quot;</span>,   <span class="st">&quot;&quot;</span>, <span class="at">rows =</span> <span class="dv">3</span>)</span>
+<span id="cb10-6"><a href="exercise-1-burn-survivors.html#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">graph_sem</span>(result_covs, <span class="at">layout =</span> lo)</span></code></pre></div>
 <p><img src="S23_files/figure-html/demotidysem1-1.png" width="672" /></p>
 <!-- lo <- get_layout("PAIN",   "",   "",   "",   "",   "",   "",   "TVLO", -->
 <!--                  "I",      "",   "",   "S",  "",   "",   "",   "Q", -->
@@ -481,19 +652,19 @@ The script below demonstrates how to plot a model using <code>tidySEM</code>. As
 <h4><span class="header-section-number">2.1.2.2</span> Tabulating results</h4>
 <p>In addition to graphing, it is also possible to tabulate the results using <code>tidySEM</code>.
 Here is a brief example:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="exercise-1-burn-survivors.html#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get all columns of results</span></span>
-<span id="cb9-2"><a href="exercise-1-burn-survivors.html#cb9-2" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table_results</span>(result_covs, <span class="at">columns =</span> <span class="cn">NULL</span>)</span>
-<span id="cb9-3"><a href="exercise-1-burn-survivors.html#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain regression parameters</span></span>
-<span id="cb9-4"><a href="exercise-1-burn-survivors.html#cb9-4" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[tab<span class="sc">$</span>op <span class="sc">==</span> <span class="st">&quot;~&quot;</span>, ]</span>
-<span id="cb9-5"><a href="exercise-1-burn-survivors.html#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove group name from the label</span></span>
-<span id="cb9-6"><a href="exercise-1-burn-survivors.html#cb9-6" aria-hidden="true" tabindex="-1"></a>tab<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">.(FE)?MALE&quot;</span>, <span class="st">&quot;&quot;</span>, tab<span class="sc">$</span>label)</span>
-<span id="cb9-7"><a href="exercise-1-burn-survivors.html#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Make a wide table with both groups next to each other</span></span>
-<span id="cb9-8"><a href="exercise-1-burn-survivors.html#cb9-8" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">reshape</span>(tab,</span>
-<span id="cb9-9"><a href="exercise-1-burn-survivors.html#cb9-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">timevar =</span> <span class="st">&quot;group&quot;</span>,</span>
-<span id="cb9-10"><a href="exercise-1-burn-survivors.html#cb9-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">idvar =</span> <span class="st">&quot;label&quot;</span>,</span>
-<span id="cb9-11"><a href="exercise-1-burn-survivors.html#cb9-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">direction =</span> <span class="st">&quot;wide&quot;</span>)</span>
-<span id="cb9-12"><a href="exercise-1-burn-survivors.html#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only the standardized estimate, pvalue, and 95% CI</span></span>
-<span id="cb9-13"><a href="exercise-1-burn-survivors.html#cb9-13" aria-hidden="true" tabindex="-1"></a>tab[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">grep</span>(<span class="st">&quot;(est_sig|pval|confint)_std&quot;</span>, <span class="fu">names</span>(tab)))]</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="exercise-1-burn-survivors.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get all columns of results</span></span>
+<span id="cb11-2"><a href="exercise-1-burn-survivors.html#cb11-2" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">table_results</span>(result_covs, <span class="at">columns =</span> <span class="cn">NULL</span>)</span>
+<span id="cb11-3"><a href="exercise-1-burn-survivors.html#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain regression parameters</span></span>
+<span id="cb11-4"><a href="exercise-1-burn-survivors.html#cb11-4" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> tab[tab<span class="sc">$</span>op <span class="sc">==</span> <span class="st">&quot;~&quot;</span>, ]</span>
+<span id="cb11-5"><a href="exercise-1-burn-survivors.html#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove group name from the label</span></span>
+<span id="cb11-6"><a href="exercise-1-burn-survivors.html#cb11-6" aria-hidden="true" tabindex="-1"></a>tab<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">.(FE)?MALE&quot;</span>, <span class="st">&quot;&quot;</span>, tab<span class="sc">$</span>label)</span>
+<span id="cb11-7"><a href="exercise-1-burn-survivors.html#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Make a wide table with both groups next to each other</span></span>
+<span id="cb11-8"><a href="exercise-1-burn-survivors.html#cb11-8" aria-hidden="true" tabindex="-1"></a>tab <span class="ot">&lt;-</span> <span class="fu">reshape</span>(tab,</span>
+<span id="cb11-9"><a href="exercise-1-burn-survivors.html#cb11-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">timevar =</span> <span class="st">&quot;group&quot;</span>,</span>
+<span id="cb11-10"><a href="exercise-1-burn-survivors.html#cb11-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">idvar =</span> <span class="st">&quot;label&quot;</span>,</span>
+<span id="cb11-11"><a href="exercise-1-burn-survivors.html#cb11-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">direction =</span> <span class="st">&quot;wide&quot;</span>)</span>
+<span id="cb11-12"><a href="exercise-1-burn-survivors.html#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Retain only the standardized estimate, pvalue, and 95% CI</span></span>
+<span id="cb11-13"><a href="exercise-1-burn-survivors.html#cb11-13" aria-hidden="true" tabindex="-1"></a>tab[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">grep</span>(<span class="st">&quot;(est_sig|pval|confint)_std&quot;</span>, <span class="fu">names</span>(tab)))]</span></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -676,6 +847,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

@@ -226,7 +226,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This computer lab session demonstrates to run latent growth models in batch, using the R-package <code>MplusAutomation</code>.
 Note that, if you do not want to automate part of your workflow (like making plots and tables), you can also use Mplus exclusively.
 All of the input files for the exercises described in this GitBook are provided with the course materials.</p>
-<p>To get started with today’s computer lab, first open the project file called “S23.Rproj.” It should load in the program “RStudio.” The bottom right panel has several tabs, including one called “Files.” Click on “Files” in this bottom right tab, and click the file “growth_exercises.R.”</p>
+<p>To get started with today’s computer lab, first open the project file called <code>"S23_student.Rproj"</code>. It should load in the program “RStudio.” The bottom right panel has several tabs, including one called “Files.” Click on “Files” in this bottom right tab, and click the file “growth_exercises.R.”</p>
 </div>
             </section>
 
@@ -286,6 +286,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

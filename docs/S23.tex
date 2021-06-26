@@ -375,14 +375,14 @@ This computer lab session demonstrates to run latent growth models in batch, usi
 Note that, if you do not want to automate part of your workflow (like making plots and tables), you can also use Mplus exclusively.
 All of the input files for the exercises described in this GitBook are provided with the course materials.
 
-To get started with today's computer lab, first open the project file called ``S23.Rproj.'' It should load in the program ``RStudio.'' The bottom right panel has several tabs, including one called ``Files.'' Click on ``Files'' in this bottom right tab, and click the file ``growth\_exercises.R.''
+To get started with today's computer lab, first open the project file called \texttt{"S23\_student.Rproj"}. It should load in the program ``RStudio.'' The bottom right panel has several tabs, including one called ``Files.'' Click on ``Files'' in this bottom right tab, and click the file ``growth\_exercises.R.''
 
 \hypertarget{exercise-1-burn-survivors}{%
 \section{Exercise 1: burn survivors}\label{exercise-1-burn-survivors}}
 
-The file ``PTSD.dat'' contains another data set on burn survivors.
+The file \texttt{“PTSD.dat”} contains data on burn survivors.
 An incomplete, basic Mplus syntax can be found in the file
-``PTSD - M0.inp.''
+\texttt{“PTSD\ -\ M0.inp”}.
 
 Specifying that same syntax could be done in R, using \texttt{MplusAutomation}, as well.
 First, load the file \texttt{PTSD.dat} into the R environment.
@@ -422,6 +422,8 @@ To evaluate this model, you can use:
 \end{Highlighting}
 \end{Shaded}
 
+The argument \texttt{run\ =\ 1L} creates the Mplus input file and data, evaluates the input file, thus creating an output file, and reads the results into R.
+
 To summarize the results, you can use:
 
 \begin{Shaded}
@@ -445,7 +447,7 @@ Think about:
 \begin{itemize}
 \tightlist
 \item
-  which metric of time to use (see the SPSS file form more information about the variables);
+  which metric of time to use (see the SPSS file for more information about the variables);
 \item
   the shape of the function (linear or quadratic);
   and base your decision of the best model on:\\
@@ -461,7 +463,44 @@ Think about:
 
 Click to show answers
 
-Here is an example of how to approach the problem:
+\textbf{Deciding on the metric of time }
+
+From the SPSS file variable descriptions:
+
+\begin{itemize}
+\tightlist
+\item
+  SVL wave 1 (2 weeks after burn injury)
+\item
+  SVL wave 2 (4 weeks)
+\item
+  SVL wave 3 (2 months)
+\item
+  SVL wave 4 (4 months)
+\item
+  SVL wave 5 (6 months)
+\item
+  SVL wave 6 (9 months)
+\item
+  SVL wave 7 (12 months)
+\item
+  SVL wave 8 (18 months)
+\end{itemize}
+
+Based on these descriptions, I've chosen for the following specification of time in the LGM:
+
+\texttt{"i\ s\ \textbar{}\ W1@0.5\ W2@1\ W3@2\ W4@4\ W5@6\ W6@9\ W7@12\ W8@18;"}
+
+In this specification I set the first time point to 0.5 months after burn injury (approximation
+of 2 weeks after burn injury), the second time point to 1 month after burn injury
+(approximation of 4 weeks after burn injury), etc.
+
+\textbf{Deciding on Linear v.s. Linear + Quadratic slope}
+
+Some example syntaxes for running models with different trajectory shapes are shown below, along with a table of the resulting fit statistics.
+
+For the model with a quadratic slope, it was necessary to fix the variance of Q at 0 to ensure convergence (you can do this by
+adding \href{mailto:q@0}{\nolinkurl{q@0}}; to the syntax). For both models, only CFI and TLI indicate adequate fit.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -498,23 +537,87 @@ Here is an example of how to approach the problem:
 \hline
 Filename & Parameters & AIC & BIC & RMSEA\_Estimate & CFI & TLI & SRMR\\
 \hline
-quad0.out & 14 & 14037 & 14085 & 0.13 & 0.94 & 0.94 & 0.08\\
-\hline
 linear.out & 13 & 14051 & 14096 & 0.14 & 0.93 & 0.94 & 0.08\\
 \hline
 quad.out & NA & NA & NA & NA & NA & NA & NA\\
+\hline
+quad0.out & 14 & 14037 & 14085 & 0.13 & 0.94 & 0.94 & 0.08\\
+\hline
+\end{tabular}
+
+Model comparison tools: To see which model fit the data better, we can do a Chi-square
+difference test, using the function \texttt{chisq\_sb()} from the \texttt{tidySEM} package. It works directly on MplusAutomation's \texttt{SummaryTable}s:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tidySEM)}
+\FunctionTok{chisq\_sb}\NormalTok{(}\FunctionTok{SummaryTable}\NormalTok{(}\FunctionTok{list}\NormalTok{(result\_linear, result\_quad0), }\AttributeTok{keepCols =} \FunctionTok{c}\NormalTok{(}\StringTok{"Filename"}\NormalTok{, }\StringTok{"ChiSqM\_Value"}\NormalTok{, }\StringTok{"ChiSqM\_DF"}\NormalTok{)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tabular}[t]{l|r|r|r|r|r}
+\hline
+Filename & ChiSqM\_Value & ChiSqM\_DF & Dchisq & Dchisq\_df & Dchisq\_p\\
+\hline
+linear.out & 173 & 31 & NA & NA & NA\\
+\hline
+quad0.out & 157 & 30 & 16 & 1 & 0\\
+\hline
+\end{tabular}
+
+Note that the
+Furthermore, both AIC and BIC are lower in the
+model with a quadratic slope. Thus, model misfit is significantly lower when the quadratic
+slope is added.
+
+\textbf{Plots}
+
+To examine the plots, you must open Mplus and examine its native plots.
+
+\textbf{Model parameters}
+
+The added quadratic slope is significant (Q = 0.02, p \textless{} .001), indicating that,
+on average, the growth curve does follow a quadratic curve.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tab }\OtherTok{\textless{}{-}} \FunctionTok{table\_results}\NormalTok{(result\_quad0, }\AttributeTok{columns =} \ConstantTok{NULL}\NormalTok{)}
+\NormalTok{tab[tab}\SpecialCharTok{$}\NormalTok{paramheader }\SpecialCharTok{==} \StringTok{"Means"}\NormalTok{, }\FunctionTok{c}\NormalTok{(}\StringTok{"param"}\NormalTok{, }\StringTok{"est\_sig"}\NormalTok{, }\StringTok{"pval"}\NormalTok{)]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tabular}[t]{l|l|l}
+\hline
+param & est\_sig & pval\\
+\hline
+I & 18.73*** & 0.00\\
+\hline
+Q & 0.02*** & 0.00\\
+\hline
+S & -0.65*** & 0.00\\
 \hline
 \end{tabular}
 
 \hypertarget{exercise-1b-add-covariates}{%
 \subsection{Exercise 1b: Add covariates}\label{exercise-1b-add-covariates}}
 
-Using the best fitting LGM model found above, regress the growth parameters on TVLO and regress Pain
-on the growth parameters (see example from slides).
+Using the best fitting LGM model found above, regress the growth parameters on TVLO and regress Pain on the growth parameters (see examples from slides 195 and 199).
 Are there gender differences in the regression of the
 growth parameters on TVLO and in the regression of Pain on the growth parameters?
 
 Click to show answers
+
+To answer this question, we use multi-group analysis.
+To do this with MplusAutomation, we add the
+following syntax to the VARIABLE argument:
+
+\texttt{VARIABLE\ =\ "GROUPING\ IS\ gender\ (1\ =\ male\ 2\ =\ female);"}
+
+Since we needed to fix the quadratic slope variance to 0, we cannot estimate any
+regressions on the quadratic slope or use the quadratic slope as a predictor of some
+outcome. We therefore focus on the intercept and linear slope.
+
+Here is how we can specify the full syntax (starting with the quad0 model as base):
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -567,6 +670,23 @@ Click to show answers
 ##   WaldChiSq_DF WaldChiSq_PValue  SRMR  AICC Filename
 ## 1            2             0.78 0.089 16009 covs.out
 \end{verbatim}
+
+This is only an illustrative example for how to approach this analysis; your specific execution may differ.
+
+Note that in this example, the Wald \(\chi^2\) p-value is not significant.
+That means that there are no significant sex differences in the effect of the growth trajectory on pain.
+
+Note that the Wald test is an overall test of \textbf{all}
+comparisons that we specify in \texttt{MODELTEST}.
+
+Thus, if you want a separate test for the regression of TVLO on the growth parameters,
+you need to re-run the analysis but with a different \texttt{MODELTEST} argument.
+
+What is your conclusion about the other research question (regarding TVLO)?
+
+Note that there are also other ways to test these hypotheses, aside from a Wald test.
+Model comparisons would also be a feasible way; either using AIC/BIC, or using a Chi square / Likelihood ratio test to compare models with parameters free vs constrained.
+For this, you could use the function \texttt{chisq\_sb()} as before.
 
 \hypertarget{visualization}{%
 \subsubsection{Visualization}\label{visualization}}
@@ -653,6 +773,26 @@ First, load the file \texttt{DDS8\_1.dat} into the R environment. For convenienc
 \end{Highlighting}
 \end{Shaded}
 
+Now, examine the patterns of missing data. For this, you could use Mplus,
+or in R, you can use the \texttt{mice} package:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"mice"}\NormalTok{)}
+\FunctionTok{library}\NormalTok{(mice)}
+\FunctionTok{md.pattern}\NormalTok{(data)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{S23_files/figure-latex/unnamed-chunk-18-1.pdf} ALC1YR1 ALCPROB5 AGE1 GENDER1 ALC1YR3 ALC1YR2\\
+428 1 1 1 1 1 1 0
+13 1 1 1 1 1 0 1
+12 1 1 1 1 0 1 1
+13 1 1 1 1 0 0 2
+0 0 0 0 25 26 51
+
+The missing data pattern shows that the majority of the cases is complete, there is a small amount of attrition over time (panel dropout).
+
 \hypertarget{exercise-2a}{%
 \subsection{Exercise 2a}\label{exercise-2a}}
 
@@ -671,8 +811,6 @@ As a starting point, use the \texttt{MplusAutomation} code below.
   \begin{enumerate}
   \def\labelenumi{\arabic{enumi}.}
   \tightlist
-  \item
-    the pattern of missing values
   \item
     how well the model fits
   \item
@@ -705,9 +843,25 @@ Here is an example of how to approach the problem:
   \AttributeTok{PLOT =} \StringTok{"SERIES = ALC1YR1 ALC1YR2 ALC1YR3 (s);}
 \StringTok{            TYPE = PLOT3;"}\NormalTok{,}
   \AttributeTok{rdata =}\NormalTok{ data,}
-  \AttributeTok{usevariables =} \FunctionTok{c}\NormalTok{(}\StringTok{"ALC1YR1"}\NormalTok{, }\StringTok{"ALC1YR2"}\NormalTok{, }\StringTok{"ALC1YR3"}\NormalTok{))}
+  \AttributeTok{usevariables =} \FunctionTok{c}\NormalTok{(}\StringTok{"ALC1YR1"}\NormalTok{, }\StringTok{"ALC1YR2"}\NormalTok{, }\StringTok{"ALC1YR3"}\NormalTok{), }
+  \AttributeTok{modelout =} \StringTok{"m0.inp"}\NormalTok{,}
+  \AttributeTok{run =}\NormalTok{ 1L)}
+
+\CommentTok{\# Missing data patterns:}
+\FunctionTok{get\_data\_summary}\NormalTok{(m0)}
+\CommentTok{\# Fit}
+\FunctionTok{SummaryTable}\NormalTok{(m0, }\AttributeTok{keepCols =} \FunctionTok{c}\NormalTok{(}\StringTok{"Filename"}\NormalTok{, }\StringTok{"Parameters"}\NormalTok{, }\StringTok{"ChiSqM\_Value"}\NormalTok{, }\StringTok{"ChiSqM\_DF"}\NormalTok{, }
+\StringTok{"ChiSqM\_PValue"}\NormalTok{, }\StringTok{"LL"}\NormalTok{, }\StringTok{"CFI"}\NormalTok{, }\StringTok{"TLI"}\NormalTok{, }\StringTok{"RMSEA\_Estimate"}\NormalTok{, }\StringTok{"SRMR"}\NormalTok{))}
+\CommentTok{\# Parameters}
+\NormalTok{tab }\OtherTok{\textless{}{-}}\NormalTok{ tidySEM}\SpecialCharTok{::}\FunctionTok{table\_results}\NormalTok{(m0, }\AttributeTok{columns =} \ConstantTok{NULL}\NormalTok{)}
+\NormalTok{tab[tab}\SpecialCharTok{$}\NormalTok{paramheader }\SpecialCharTok{==} \StringTok{"Means"}\NormalTok{, }\FunctionTok{c}\NormalTok{(}\StringTok{"label"}\NormalTok{, }\StringTok{"est\_sig"}\NormalTok{, }\StringTok{"pval"}\NormalTok{)]}
 \end{Highlighting}
 \end{Shaded}
+
+The model fit should be very good, with non-significant chi-square, and good fit according to CFL/TLI. The intercept and slope means indicate
+a relatively high starting point (3.68) and a growth of 0.92 per year. The Intercept and Slope
+show considerable variance, indicating that the starting points and rates of growth differ
+considerably across individuals.
 
 \hypertarget{exercise-2b}{%
 \subsection{Exercise 2b}\label{exercise-2b}}
@@ -831,13 +985,21 @@ i WITH s@0; & 8 & 5211 & 5244 & 0.16 & 0.74 & 0.60 & 0.08\\
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{S23_files/figure-latex/unnamed-chunk-16-1.pdf}
+\includegraphics{S23_files/figure-latex/unnamed-chunk-22-1.pdf}
 
 It looks like, paradoxically, predicting I and S from either age or gender
 has the best fit. However, note that there is only a small difference between
-the smallest and the largest BIC: diff(range(tab\$BIC)).
+the smallest and the largest BIC: 67.36.
 I would either go for the simplest model (i WITH \href{mailto:s@0}{\nolinkurl{s@0}}), or go for the
 best-fitting model (i s ON GENDER1).
+
+Note that the covariance
+between intercept and slope disappears from the model when you add predictors, as
+this turns it into a covariance
+between a latent variable and a residual. Mplus automatically constrains these to zero.
+If we add the statement I WITH S to the model, we obtain a good fit with significant effects of both gender and age on the intercept.
+NOTE: This illustrates the importance of checking the output carefully to find out if Mplus is
+actually doing what you think it does!
 
 \hypertarget{exercise-2c}{%
 \subsection{Exercise 2c}\label{exercise-2c}}
@@ -848,12 +1010,18 @@ factors, or if there are additional direct paths from age and gender on the alco
 
 Click to show answers
 
-To test whether there is full mediation or not, we want to test whether the direct
+The model fit is still good. Note that after adding a categorical dependent variable to the
+model, Mplus switches to a robust estimator (MLR). Both intercept and slope predict alcohol problems. Age also predicts alcohol problems directly. Since age
+predicts alcohol problems both directly and via the intercept, a mediation analysis is in
+order. This shows that the indirect effect of age via the intercept on alcohol problems is still
+significant when the direct effect is added to the model.
+
+To test whether there is full mediation or not, we may want to test whether the direct
 effects are equal to zero or not.
 
 If the analysis had not included a categorical dependent variable,
-then we would have been able to compute the difference test using MplusAutomation's
-function \texttt{compareModels(model1,\ model2,\ diffTest\ =\ TRUE)}.
+then we would have been able to compute the difference test using the \texttt{tidySEM}
+function \texttt{chisq\_sb(SummaryTable(keepCols\ =\ NULL))}.
 
 However, in the presence of a categorical dependent variable, we must use Mplus'
 option \texttt{difftest}.
@@ -924,7 +1092,7 @@ Let's use a graph to examine the unconstrained model too:
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{S23_files/figure-latex/unnamed-chunk-18-1.pdf}
+\includegraphics{S23_files/figure-latex/unnamed-chunk-24-1.pdf}
 
 \hypertarget{exercise-3-level-and-shape-parameterization}{%
 \section{Exercise 3: Level and Shape Parameterization}\label{exercise-3-level-and-shape-parameterization}}
@@ -975,6 +1143,11 @@ This can be done as follows:
 \end{Highlighting}
 \end{Shaded}
 
+The factor loading indicates the proportion of change from the starting time point to the
+current one. Thus, 24\% of the total change occurs between GPA1 and GPA2. Mean S = 0.55. This indicates the total change between GPA1 and GPA6. The intercept at GPA1 = 2.575. So the
+estimated score at GPA2 = 2.575 + 0.239\emph{0.549 = 2.706, the estimated score at GPA3 =
+2.575 + 0.450}0.549 = 2.822, etcetera.
+
 \begin{tabular}[t]{l|l|l|l}
 \hline
 label & est\_sig & pval & confint\\
@@ -1020,6 +1193,10 @@ This can be done as follows:
 \NormalTok{tab[, }\FunctionTok{c}\NormalTok{(}\StringTok{"label"}\NormalTok{, }\StringTok{"est\_sig"}\NormalTok{, }\StringTok{"pval"}\NormalTok{, }\StringTok{"confint"}\NormalTok{)]}
 \end{Highlighting}
 \end{Shaded}
+
+Mean S now indicates the difference between GPA1 and GPA2. The estimated factor loadings
+indicate the distance in units from the starting point, where 1 unit is S. You could also say
+that every distance compares to the increase between GPA1 and GPA2.
 
 \begin{tabular}[t]{l|l|l|l}
 \hline
@@ -1101,6 +1278,10 @@ S.ON.SEX & 0.14* & 0.01 & [ 0.03,  0.24]\\
 \hline
 \end{tabular}
 
+Sex is a significant predictor of the intercept and a significant
+predictor of development, with girls having a higher initial level, and a greater
+development over time.
+
 \hypertarget{exercise-4-latent-growth-model-on-gpa-data}{%
 \section{Exercise 4: latent growth model on GPA data}\label{exercise-4-latent-growth-model-on-gpa-data}}
 
@@ -1180,7 +1361,7 @@ THAN TWO LATENT VARIABLES. CHECK THE TECH4 OUTPUT FOR MORE INFORMATION.
 
 A rough way to deal with this problem may be to fix the problematic parameter to a particular value (ie. .001), try this and re-run the model.
 
-Now examine the same parameters as for exercise 3a, and compare the two. Are there
+Now examine the same parameters as for exercise 4a, and compare the two. Are there
 major differences?
 
 \begin{itemize}
@@ -1195,7 +1376,7 @@ major differences?
 
 Click to show answers
 
-This can be done as follows, using m3 as starting point:
+This can be done as follows, using m4 as starting point:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1219,6 +1400,12 @@ This can be done as follows, using m3 as starting point:
 \end{Highlighting}
 \end{Shaded}
 
+Note that, without \texttt{year3@.001}, this code gives an error message: The variance of the latent variable year3 is
+estimated negatively which is problematic since variances should always be positive. A
+simple way to deal with the problem of the latent variance of year3 is to fix it to a very small
+value (.001) for instance, as it would also be illogical to fix a variance to 0. To do this, simply
+add this to your input file under model: year3@.001;
+
 AIC BIC ChiSqM\_Value RMSEA\_Estimate CFI TLI
 1 130 177 48 0.12 0.96 0.95
 
@@ -1238,6 +1425,14 @@ Variances.S & 0.01** & 0.00 & [ 0.00,  0.01]\\
 \hline
 \end{tabular}
 
+Compare the estimates from the two models. Are there major differences?
+If you inspect the output carefully (and provided you have requested standardized
+estimates) you will notice that the latent variables year2 and year3 have a correlation of 1.
+So the negative variance is the result of a multicollinearity problem. It is apparently better to
+analyze these data using only the observed variables gpa1-gpa6. Creating latent variables
+per year does not work well.
+In line with this interpretation, the fit and results of the simple latent growth model look better than the 2nd order latent growth curve model.
+
 \hypertarget{day-3-latent-growth-mixture-modeling}{%
 \chapter{Day 3: Latent Growth (Mixture) Modeling}\label{day-3-latent-growth-mixture-modeling}}
 
@@ -1245,13 +1440,7 @@ This computer lab session demonstrates to run latent growth mixture models in ba
 Note that, if you do not want to automate part of your workflow (like making plots and tables), you can also use Mplus exclusively.
 All of the input files for the exercises described in this GitBook are provided with the course materials.
 
-To get started with today's computer lab, first open the project file called ``S23.Rproj.'' It should load in the program ``RStudio.'' The bottom right panel has several tabs, including one called ``Files.'' Click on ``Files'' in this bottom right tab, and click the file ``mixture\_exercises.R.''
-
-This computer lab session demonstrates to run latent growth models in batch, using the R-package \texttt{MplusAutomation}.
-Note that, if you do not want to automate part of your workflow (like making plots and tables), you can also use Mplus exclusively.
-All of the input files for the exercises described in this GitBook are provided with the course materials.
-
-To get started with today's computer lab, first open the project file called ``S23.Rproj.'' It should load in the program ``RStudio.'' The bottom right panel has several tabs, including one called ``Files.'' Click on ``Files'' in this bottom right tab, and click the file ``growth\_exercises.R.''
+To get started with today's computer lab, first open the project file called \texttt{"S23\_student.Rproj"}. It should load in the program ``RStudio.'' The bottom right panel has several tabs, including one called ``Files.'' Click on ``Files'' in this bottom right tab, and click the file ``mixture\_exercises.R.''
 
 \hypertarget{exercise-1-latent-growth-mixture-modeling}{%
 \section{Exercise 1: Latent Growth (Mixture) Modeling}\label{exercise-1-latent-growth-mixture-modeling}}
@@ -1340,17 +1529,17 @@ The resulting syntax should look like this:
 \hline
 Title & Classes & AIC & BIC & aBIC & Entropy & T11\_VLMR\_PValue & T11\_LMR\_PValue & BLRT\_PValue & min\_N & max\_N & min\_prob & max\_prob\\
 \hline
-6 classes & 1 & 4938 & 5020 & 4957 & 0.76 & 0.00 & 0.00 & 0 & 466 & 466 & 1.00 & 1.00\\
+1 classes & 1 & 5339 & 5360 & 5344 & NA & NA & NA & NA & 466 & 466 & 1.00 & 1.00\\
 \hline
-5 classes & 2 & 4962 & 5032 & 4978 & 0.75 & 0.11 & 0.12 & 0 & 144 & 322 & 0.86 & 0.95\\
+2 classes & 2 & 5191 & 5224 & 5199 & 0.73 & 0.00 & 0.00 & 0 & 144 & 322 & 0.86 & 0.95\\
 \hline
-4 classes & 3 & 4971 & 5029 & 4984 & 0.80 & 0.01 & 0.01 & 0 & 65 & 262 & 0.86 & 0.96\\
+3 classes & 3 & 4995 & 5040 & 5005 & 0.82 & 0.00 & 0.00 & 0 & 65 & 262 & 0.86 & 0.96\\
 \hline
-3 classes & 4 & 4995 & 5040 & 5005 & 0.82 & 0.00 & 0.00 & 0 & 39 & 237 & 0.65 & 0.94\\
+4 classes & 4 & 4971 & 5029 & 4984 & 0.80 & 0.01 & 0.01 & 0 & 39 & 237 & 0.65 & 0.94\\
 \hline
-2 classes & 5 & 5191 & 5224 & 5199 & 0.73 & 0.00 & 0.00 & 0 & 34 & 204 & 0.73 & 0.92\\
+5 classes & 5 & 4962 & 5032 & 4978 & 0.75 & 0.11 & 0.12 & 0 & 34 & 204 & 0.73 & 0.92\\
 \hline
-1 classes & 6 & 5339 & 5360 & 5344 & NA & NA & NA & NA & 32 & 147 & 0.69 & 0.91\\
+6 classes & 6 & 4938 & 5020 & 4957 & 0.76 & 0.00 & 0.00 & 0 & 32 & 147 & 0.69 & 0.91\\
 \hline
 \end{tabular}
 
@@ -1416,17 +1605,17 @@ The resulting syntax should look like this:
 \hline
 Title & Classes & AIC & BIC & aBIC & Entropy & T11\_VLMR\_PValue & T11\_LMR\_PValue & BLRT\_PValue & min\_N & max\_N & min\_prob & max\_prob\\
 \hline
-6 classes & 1 & 4938 & 5020 & 4957 & 0.76 & 0.00 & 0.00 & 0 & 466 & 466 & 1.00 & 1.00\\
+1 classes & 1 & 5339 & 5360 & 5344 & NA & NA & NA & NA & 466 & 466 & 1.00 & 1.00\\
 \hline
-5 classes & 2 & 4962 & 5032 & 4978 & 0.75 & 0.11 & 0.12 & 0 & 144 & 322 & 0.86 & 0.95\\
+2 classes & 2 & 5191 & 5224 & 5199 & 0.73 & 0.00 & 0.00 & 0 & 144 & 322 & 0.86 & 0.95\\
 \hline
-4 classes & 3 & 4971 & 5029 & 4984 & 0.80 & 0.01 & 0.01 & 0 & 65 & 262 & 0.86 & 0.96\\
+3 classes & 3 & 4995 & 5040 & 5005 & 0.82 & 0.00 & 0.00 & 0 & 65 & 262 & 0.86 & 0.96\\
 \hline
-3 classes & 4 & 4995 & 5040 & 5005 & 0.82 & 0.00 & 0.00 & 0 & 39 & 237 & 0.65 & 0.94\\
+4 classes & 4 & 4971 & 5029 & 4984 & 0.80 & 0.01 & 0.01 & 0 & 39 & 237 & 0.65 & 0.94\\
 \hline
-2 classes & 5 & 5191 & 5224 & 5199 & 0.73 & 0.00 & 0.00 & 0 & 34 & 204 & 0.73 & 0.92\\
+5 classes & 5 & 4962 & 5032 & 4978 & 0.75 & 0.11 & 0.12 & 0 & 34 & 204 & 0.73 & 0.92\\
 \hline
-1 classes & 6 & 5339 & 5360 & 5344 & NA & NA & NA & NA & 32 & 147 & 0.69 & 0.91\\
+6 classes & 6 & 4938 & 5020 & 4957 & 0.76 & 0.00 & 0.00 & 0 & 32 & 147 & 0.69 & 0.91\\
 \hline
 \end{tabular}
 
